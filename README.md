@@ -8,7 +8,11 @@ This repository contains the **prebuilt, modified version** of Chatbox — an El
 
 ## Screenshots
 
-**[Image 1] Albedo Chat 6_20_2026 1_56_21 PM**
+**[Image 1] Albedo Chat 6_20_2026 1_55_49 PM**
+
+![Screenshot](screenshots/chat-view-2.png)
+
+**[Image 2] Albedo Chat 6_20_2026 1_56_21 PM**
 
 ![Screenshot](screenshots/chat-view.png)
 
