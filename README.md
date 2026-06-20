@@ -149,3 +149,5 @@ node albedo-send.js "Hello from external script"
 ## License
 
 Same as the original — [GPL v3](LICENSE). This is a modified fork of the [Chatbox Community Edition](https://github.com/chatboxai/chatbox).
+
+<sub>For educational purpose — download on your own risk.</sub>
