@@ -118,6 +118,12 @@ node albedo-send.js "Hello from external script"
 | `dist/renderer/index.html` | Splash screen, theme engine JS/CSS, canvas animations, study drawer (timer + music player), search fetch interceptor |
 | `package.json` | Rebranded to Chatbox Modified, cleaned metadata |
 
+## Screenshots
+
+| Theme Panel | Chat View | Study Drawer |
+|-------------|-----------|--------------|
+| ![Theme Panel](screenshots/theme-panel.png) | ![Chat View](screenshots/chat-view.png) | ![Study Drawer](screenshots/study-drawer.png) |
+
 ## Technology
 
 - **Built on:** Chatbox Community Edition (GPL v3)
