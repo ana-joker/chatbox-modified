@@ -101,9 +101,19 @@ node albedo-send.js "Hello from external script"
 
 ## How to Use
 
-1. **Download** the official [Chatbox Community Edition](https://github.com/chatboxai/chatbox/releases) installer for your platform
-2. **Replace** the `resources/app/` folder inside the Chatbox installation directory with the contents of this repository
-3. **Launch** Chatbox as usual — the modifications are all client-side
+### Option 1 — Portable (Recommended)
+
+1. **Download** the latest portable build from [Releases](https://github.com/ana-joker/chatbox-modified/releases)
+2. **Extract** the zip anywhere
+3. **Run** `ChatboxModified.exe` — no installation required
+
+### Option 2 — Manual (Apply to Your Own Chatbox Install)
+
+1. **Download** [Chatbox v1.15.4](https://github.com/chatboxai/chatbox/releases) for Windows and install it
+2. **Download** this repository as a zip or clone it
+3. **Navigate** to your Chatbox installation directory (typically `C:\Users\<you>\AppData\Local\Programs\Chatbox\`)
+4. **Replace** the `resources/app/` folder with the `dist/` and `package.json` files from this repository
+5. **Launch** Chatbox as usual — the modifications apply automatically
 
 ### Prerequisites
 
