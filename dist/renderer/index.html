@@ -1,0 +1,2526 @@
+<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="height=device-height,width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover"><meta name=apple-mobile-web-app-capable content=yes><meta name=apple-mobile-web-app-title content="Chatbox Modified"><meta name=theme-color content=#0d0015><meta name=description content="Chatbox Modified - Enhanced Chatbox Community Edition"><link rel=apple-touch-icon href=%PUBLIC_URL%/logo192.png><title>Chatbox Modified</title><!-- TELEMETRY REMOVED --><link rel=icon href=./assets/icon.ico><script>var initialTheme = localStorage.getItem("initial-theme");
+      if (initialTheme === "light" || initialTheme === "dark") {
+        document.documentElement.setAttribute("data-theme", initialTheme);
+        document.documentElement.setAttribute(
+          "data-mantine-color-scheme",
+          initialTheme
+        );
+      }</script><style>html[data-theme="dark"] {
+        background-color: #242424;
+      }
+
+      .splash-screen {
+        position: fixed;
+        z-index: 99999;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 1;
+        background: linear-gradient(135deg, #1a0a2e 0%, #2d0a4e 25%, #3d0f5e 50%, #2a0a3e 75%, #0d0015 100%);
+        overflow: hidden;
+      }
+      html[data-theme="dark"] .splash-screen {
+        background: linear-gradient(135deg, #0a0015 0%, #1a0a2e 25%, #2d0a4e 50%, #1a0a2e 75%, #0a0015 100%);
+      }
+
+      .splash-screen::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle at 30% 50%, rgba(120, 30, 180, 0.15) 0%, transparent 50%),
+                    radial-gradient(circle at 70% 50%, rgba(200, 50, 50, 0.1) 0%, transparent 50%);
+        animation: ambient-glow 8s ease-in-out infinite alternate;
+      }
+
+      @keyframes ambient-glow {
+        0% { transform: translate(0, 0) rotate(0deg); }
+        100% { transform: translate(2%, 1%) rotate(3deg); }
+      }
+
+      .splash-screen-top {
+        flex: 2;
+      }
+      .splash-screen-bottom {
+        flex: 3;
+        width: 100%;
+        position: relative;
+      }
+      .splash-screen-content {
+        flex: 0 0 auto;
+        position: relative;
+        z-index: 1;
+      }
+
+      .splash-screen-logo {
+        display: block;
+        color: #e8d0ff;
+        filter: drop-shadow(0 0 20px rgba(150, 60, 200, 0.5));
+      }
+      html[data-theme="dark"] .splash-screen-logo {
+        color: #c8a0ff;
+        filter: drop-shadow(0 0 30px rgba(150, 60, 200, 0.4));
+      }
+
+      .splash-screen-logo-bg {
+        position: absolute;
+        z-index: -1;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: rgba(80, 20, 120, 0.3);
+      }
+      html[data-theme="dark"] .splash-screen-logo-bg {
+        color: rgba(60, 15, 100, 0.3);
+      }
+
+      .splash-screen-fade-out {
+        animation: fade-out 0.5s ease-in-out forwards;
+      }
+
+      @keyframes fade-out {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+
+      .splash-screen-title {
+        color: #c8a0ff;
+        font-size: 24px;
+        font-weight: bold;
+        margin-top: 16px;
+        text-shadow: 0 0 20px rgba(150, 60, 200, 0.6);
+        font-family: 'Segoe UI', sans-serif;
+        letter-spacing: 4px;
+      }
+      
+      html[data-theme="dark"] .splash-screen-title {
+        color: #b080e0;
+      }
+
+      .splash-screen-subtitle {
+        color: #a080c0;
+        font-size: 11px;
+        margin-top: 6px;
+        opacity: 0.7;
+        letter-spacing: 2px;
+      }
+/* ==========================================
+   ALBEDO STUDY TOOLS CSS v2.0 (PLAYLIST ONLY)
+   ========================================== */
+
+/* Floating Toggle Button (Left side) */
+.albedo-study-toggle {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(13, 0, 21, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 9999;
+  backdrop-filter: blur(12px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+.albedo-study-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6), 0 0 25px var(--theme-primary-color, #8b5cf6);
+  border-color: var(--theme-primary-color, #8b5cf6);
+}
+.albedo-study-toggle svg {
+  width: 22px;
+  height: 22px;
+  fill: #e5e7eb;
+  transition: fill 0.3s;
+}
+.albedo-study-toggle:hover svg {
+  fill: var(--theme-primary-color, #8b5cf6);
+}
+
+/* Sliding Switcher Panel Drawer (Left side) */
+.albedo-study-drawer {
+  position: fixed;
+  top: 0;
+  left: -360px;
+  width: 340px;
+  height: 100%;
+  background: rgba(10, 3, 18, 0.92);
+  backdrop-filter: blur(30px);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 10000;
+  transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  color: #f3f4f6;
+  box-shadow: 10px 0 35px rgba(0, 0, 0, 0.65);
+}
+.albedo-study-drawer.active {
+  left: 0;
+}
+
+.albedo-study-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
+  z-index: 9998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.albedo-study-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Header */
+.albedo-study-drawer-header {
+  padding: 24px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.albedo-study-drawer-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+.albedo-study-drawer-header p {
+  margin: 4px 0 0 0;
+  font-size: 11px;
+  color: #9ca3af;
+}
+.albedo-study-drawer-close {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+.albedo-study-drawer-close:hover {
+  color: #ef4444;
+}
+
+/* Drawer Content */
+.albedo-study-drawer-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+/* Scrollbar */
+.albedo-study-drawer-content::-webkit-scrollbar {
+  width: 5px;
+}
+.albedo-study-drawer-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+.albedo-study-drawer-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+/* Common Section Styles */
+.albedo-study-section {
+  margin-bottom: 28px;
+}
+.albedo-study-section-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--theme-primary-color, #8b5cf6);
+  margin-bottom: 14px;
+  opacity: 0.95;
+}
+
+/* --- TIMER CARD DESIGN --- */
+.albedo-timer-tabs {
+  display: flex;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  padding: 3px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+.albedo-timer-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 8px 4px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+.albedo-timer-tab.active {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.albedo-timer-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.albedo-circular-timer {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.albedo-timer-svg {
+  width: 140px;
+  height: 140px;
+  transform: rotate(-90deg);
+}
+.albedo-timer-svg circle {
+  fill: none;
+  stroke-width: 5;
+}
+.albedo-timer-svg circle.bg {
+  stroke: rgba(255, 255, 255, 0.04);
+}
+.albedo-timer-svg circle.progress {
+  stroke: var(--theme-primary-color, #8b5cf6);
+  stroke-linecap: round;
+  stroke-dasharray: 283;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.1s linear;
+  filter: drop-shadow(0 0 4px var(--theme-primary-color, #8b5cf6));
+}
+.albedo-timer-display {
+  position: absolute;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  font-family: monospace, system-ui;
+  color: #fff;
+}
+.albedo-timer-controls {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+  width: 100%;
+}
+.albedo-timer-btn {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.albedo-timer-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.albedo-timer-btn.primary {
+  background: var(--theme-primary-color, #8b5cf6);
+  border-color: transparent;
+  box-shadow: 0 4px 15px rgba(var(--theme-primary-rgb, 139, 92, 246), 0.3);
+}
+.albedo-timer-btn.primary:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 4px 20px rgba(var(--theme-primary-rgb, 139, 92, 246), 0.55);
+}
+
+.albedo-timer-presets {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+  margin-bottom: 12px;
+  justify-content: space-between;
+}
+.albedo-preset-btn {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: #9ca3af;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.albedo-preset-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.albedo-custom-time {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+.albedo-custom-time input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: #fff;
+  padding: 6px 10px;
+  font-size: 11px;
+}
+.albedo-custom-time input:focus {
+  outline: none;
+  border-color: var(--theme-primary-color, #8b5cf6);
+}
+.albedo-custom-time button {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.albedo-custom-time button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.albedo-session-stats {
+  margin-top: 14px;
+  font-size: 11px;
+  color: #9ca3af;
+  text-align: center;
+}
+.albedo-session-stats span {
+  color: var(--theme-primary-color, #8b5cf6);
+  font-weight: 700;
+}
+
+/* --- MUSIC CARD & DISK --- */
+.albedo-music-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.albedo-music-disc-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+.albedo-music-disc {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #2d0f5e 20%, #15062c 60%, #0d0015 100%);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  transition: transform 0.5s ease;
+}
+.albedo-music-disc.playing {
+  animation: rotateDisc 4s linear infinite;
+  box-shadow: 0 0 20px rgba(var(--theme-primary-rgb, 139, 92, 246), 0.35);
+  border-color: var(--theme-primary-color, #8b5cf6);
+}
+@keyframes rotateDisc {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.albedo-track-info {
+  text-align: center;
+  margin-bottom: 12px;
+}
+.albedo-track-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.albedo-track-source {
+  font-size: 10px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+/* Playback Options (Shuffle, Repeat) */
+.albedo-playback-options {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.albedo-opt-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: #9ca3af;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+.albedo-opt-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+.albedo-opt-btn.active {
+  color: #fff;
+  background: rgba(var(--theme-primary-rgb, 139, 92, 246), 0.12);
+  border-color: var(--theme-primary-color, #8b5cf6);
+  box-shadow: 0 0 10px rgba(var(--theme-primary-rgb, 139, 92, 246), 0.2);
+}
+
+.albedo-audio-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.albedo-audio-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 11px;
+}
+.albedo-audio-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+}
+.albedo-audio-btn.primary {
+  width: 42px;
+  height: 42px;
+  font-size: 15px;
+  background: var(--theme-primary-color, #8b5cf6);
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(var(--theme-primary-rgb, 139, 92, 246), 0.3);
+}
+.albedo-audio-btn.primary:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 4px 15px rgba(var(--theme-primary-rgb, 139, 92, 246), 0.5);
+}
+
+.albedo-volume-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.albedo-vol-icon {
+  font-size: 12px;
+  cursor: pointer;
+  color: #9ca3af;
+  user-select: none;
+}
+.albedo-volume-slider {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  outline: none;
+  background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  accent-color: var(--theme-primary-color, #8b5cf6);
+}
+.albedo-vol-text {
+  font-size: 10px;
+  color: #9ca3af;
+  width: 30px;
+  text-align: right;
+}
+
+/* Upload Container */
+.albedo-upload-section {
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px dashed rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+.albedo-upload-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: #9ca3af;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.albedo-upload-buttons {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.albedo-upload-btn {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.albedo-upload-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.albedo-dropzone {
+  cursor: pointer;
+  padding: 10px 5px;
+  background: rgba(255, 255, 255, 0.01);
+  border-radius: 6px;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+.albedo-dropzone:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+.albedo-dropzone p {
+  margin: 4px 0 0 0;
+  font-size: 10px;
+  color: #9ca3af;
+}
+.albedo-dropzone strong {
+  color: var(--theme-primary-color, #8b5cf6);
+}
+.albedo-dropzone .icon {
+  font-size: 16px;
+}
+
+/* --- PLAYLIST CONTAINER & LIST --- */
+.albedo-playlist-container {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  max-height: 220px;
+  display: flex;
+  flex-direction: column;
+}
+.albedo-playlist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 10px;
+  font-weight: 700;
+  color: #9ca3af;
+}
+.albedo-playlist-clear {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 600;
+}
+.albedo-playlist-clear:hover {
+  text-decoration: underline;
+}
+.albedo-playlist-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  max-height: 180px;
+}
+/* Scrollbar for list */
+.albedo-playlist-list::-webkit-scrollbar {
+  width: 4px;
+}
+.albedo-playlist-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.albedo-playlist-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+}
+.albedo-playlist-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 11px;
+}
+.albedo-playlist-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+.albedo-playlist-item.active {
+  background: rgba(var(--theme-primary-rgb, 139, 92, 246), 0.08);
+  border-left: 3px solid var(--theme-primary-color, #8b5cf6);
+}
+.albedo-playlist-item-left {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  flex: 1;
+}
+.albedo-playlist-item-index {
+  color: #6b7280;
+  font-size: 9px;
+  margin-right: 8px;
+  min-width: 14px;
+}
+.albedo-playlist-item-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #d1d5db;
+  text-align: left;
+}
+.albedo-playlist-item.active .albedo-playlist-item-name {
+  color: #fff;
+  font-weight: 600;
+}
+.albedo-playlist-item.active .albedo-playlist-item-index {
+  color: var(--theme-primary-color, #8b5cf6);
+}
+
+</style><link rel=icon href=./favicon.ico><script defer=defer src=./assets/js/main.3920b58b9a28f5b33381.js></script><link href=./main.64e858dad79be53b1986.css rel=stylesheet></head><body>
+<style>
+.albedo-canvas-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+#root {
+  position: relative;
+  z-index: 1;
+}
+.splash-screen {
+  z-index: 99999 !important;
+}
+
+/* Custom CSS Themes overrides */
+.theme-loki {
+  --theme-primary-color: #22c55e;
+  --theme-primary-hover: #16a34a;
+  --theme-bg-color: #030a05;
+  --theme-card-bg: #06160b;
+  --theme-border: #0c2614;
+  --theme-input-bg: #091c0e;
+  --theme-active-canvas-hue: 120;
+}
+.theme-doctor {
+  --theme-primary-color: #06b6d4;
+  --theme-primary-hover: #0891b2;
+  --theme-bg-color: #020b10;
+  --theme-card-bg: #051620;
+  --theme-border: #0a2533;
+  --theme-input-bg: #071c26;
+  --theme-active-canvas-hue: 190;
+}
+.theme-aizen {
+  --theme-primary-color: #f59e0b;
+  --theme-primary-hover: #d97706;
+  --theme-bg-color: #0d0601;
+  --theme-card-bg: #1a0e03;
+  --theme-border: #2c1908;
+  --theme-input-bg: #221204;
+  --theme-active-canvas-hue: 35;
+}
+.theme-sakura {
+  --theme-primary-color: #f43f5e;
+  --theme-primary-hover: #e11d48;
+  --theme-bg-color: #0f0105;
+  --theme-card-bg: #1e030c;
+  --theme-border: #300816;
+  --theme-input-bg: #260511;
+  --theme-active-canvas-hue: 350;
+}
+.theme-oled {
+  --theme-primary-color: #94a3b8;
+  --theme-primary-hover: #64748b;
+  --theme-bg-color: #000000;
+  --theme-card-bg: #09090b;
+  --theme-border: #18181b;
+  --theme-input-bg: #0e0e11;
+  --theme-active-canvas-hue: 200;
+}
+.theme-albedo {
+  --theme-primary-color: #8b5cf6;
+  --theme-primary-hover: #7c3aed;
+  --theme-bg-color: #0b0218;
+  --theme-card-bg: #15062c;
+  --theme-border: #220b42;
+  --theme-input-bg: #1c0937;
+  --theme-active-canvas-hue: 270;
+}
+
+/* Global Overrides when theme class is active */
+html.theme-loki, html.theme-doctor, html.theme-aizen, html.theme-sakura, html.theme-oled, html.theme-albedo {
+  --mantine-color-body: var(--theme-bg-color) !important;
+  
+  --mantine-color-dark-7: var(--theme-bg-color) !important;
+  --mantine-color-dark-6: var(--theme-card-bg) !important;
+  --mantine-color-dark-8: var(--theme-bg-color) !important;
+  --mantine-color-dark-5: var(--theme-input-bg) !important;
+  --mantine-color-dark-4: var(--theme-border) !important;
+  
+  --mantine-color-blue-0: var(--theme-primary-color) !important;
+  --mantine-color-blue-1: var(--theme-primary-color) !important;
+  --mantine-color-blue-2: var(--theme-primary-color) !important;
+  --mantine-color-blue-3: var(--theme-primary-color) !important;
+  --mantine-color-blue-4: var(--theme-primary-color) !important;
+  --mantine-color-blue-5: var(--theme-primary-color) !important;
+  --mantine-color-blue-6: var(--theme-primary-color) !important;
+  --mantine-color-blue-7: var(--theme-primary-hover) !important;
+  --mantine-color-blue-8: var(--theme-primary-hover) !important;
+  
+  --mantine-color-blue-filled: var(--theme-primary-color) !important;
+  --mantine-color-blue-filled-hover: var(--theme-primary-hover) !important;
+  --mantine-color-blue-light: rgba(255, 255, 255, 0.08) !important;
+  --mantine-color-blue-light-color: var(--theme-primary-color) !important;
+  --mantine-color-blue-text: var(--theme-primary-color) !important;
+}
+
+/* Floating Settings Button */
+.albedo-theme-toggle {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(15, 10, 25, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 15px rgba(var(--theme-active-rgb, 139, 92, 246), 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 9999;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.albedo-theme-toggle:hover {
+  transform: scale(1.1) rotate(45deg);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6), 0 0 25px var(--theme-primary-color, #8b5cf6);
+  border-color: var(--theme-primary-color, #8b5cf6);
+}
+.albedo-theme-toggle svg {
+  width: 22px;
+  height: 22px;
+  fill: #e5e7eb;
+  transition: fill 0.3s;
+}
+.albedo-theme-toggle:hover svg {
+  fill: var(--theme-primary-color, #8b5cf6);
+}
+
+/* Sliding Switcher Panel Drawer */
+.albedo-theme-drawer {
+  position: fixed;
+  top: 0;
+  right: -360px;
+  width: 330px;
+  height: 100%;
+  background: rgba(10, 5, 22, 0.88);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: -10px 0 35px rgba(0, 0, 0, 0.65);
+  z-index: 10000;
+  transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  color: #e5e7eb;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  user-select: none;
+}
+.albedo-theme-drawer.active {
+  right: 0;
+}
+.albedo-theme-drawer-header {
+  padding: 22px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.albedo-theme-drawer-header h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+.albedo-theme-drawer-header p {
+  margin: 4px 0 0 0;
+  font-size: 10px;
+  color: #9ca3af;
+  letter-spacing: 1px;
+}
+.albedo-theme-drawer-close {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+.albedo-theme-drawer-close:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+.albedo-theme-drawer-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+.albedo-theme-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.albedo-theme-section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+}
+.albedo-theme-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.albedo-theme-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.albedo-theme-card:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+}
+.albedo-theme-card.active {
+  background: rgba(var(--theme-active-rgb, 139, 92, 246), 0.08);
+  border-color: var(--theme-active-color, #8b5cf6);
+  box-shadow: 0 0 10px rgba(var(--theme-active-rgb, 139, 92, 246), 0.25);
+}
+.albedo-theme-preview {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  margin-bottom: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  overflow: hidden;
+}
+.albedo-theme-preview-half {
+  flex: 1;
+}
+.albedo-theme-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #f3f4f6;
+  margin-bottom: 2px;
+}
+.albedo-theme-desc {
+  font-size: 9px;
+  color: #9ca3af;
+}
+
+/* Background Card Previews */
+.albedo-bg-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.albedo-bg-card:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateX(2px);
+}
+.albedo-bg-card.active {
+  background: rgba(var(--theme-active-rgb, 139, 92, 246), 0.08);
+  border-color: var(--theme-active-color, #8b5cf6);
+  box-shadow: 0 0 10px rgba(var(--theme-active-rgb, 139, 92, 246), 0.25);
+}
+.albedo-bg-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+}
+.albedo-bg-info {
+  flex: 1;
+}
+.albedo-bg-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #f3f4f6;
+}
+.albedo-bg-desc {
+  font-size: 9px;
+  color: #9ca3af;
+}
+
+/* Controls / Sliders */
+.albedo-control-group {
+  margin-bottom: 20px;
+}
+.albedo-control-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #9ca3af;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+.albedo-control-val {
+  font-weight: 600;
+  color: #fff;
+}
+.albedo-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  outline: none;
+}
+.albedo-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--theme-primary-color, #8b5cf6);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.albedo-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Overlay Backdrop */
+.albedo-theme-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 9998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.albedo-theme-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+</style>
+<canvas id="albedo-bg" class="albedo-canvas-bg"></canvas>
+
+<!-- Switcher Interface HTML -->
+<div class="albedo-theme-overlay" id="albedo-theme-overlay"></div>
+<div class="albedo-theme-drawer" id="albedo-theme-drawer">
+  <div class="albedo-theme-drawer-header">
+    <div>
+      <h3>ALBEDO VESSEL</h3>
+      <p>Configure cognitive layer</p>
+    </div>
+    <button class="albedo-theme-drawer-close" id="albedo-theme-drawer-close">&times;</button>
+  </div>
+  <div class="albedo-theme-drawer-content">
+    
+    <!-- UI THEMES SECTION -->
+    <div class="albedo-theme-section-title">Color Theme</div>
+    <div class="albedo-theme-grid">
+      <div class="albedo-theme-card" data-theme="albedo">
+        <div class="albedo-theme-preview">
+          <div class="albedo-theme-preview-half" style="background:#15062c"></div>
+          <div class="albedo-theme-preview-half" style="background:#8b5cf6"></div>
+        </div>
+        <div class="albedo-theme-name">Albedo</div>
+        <div class="albedo-theme-desc">Purple Glow</div>
+      </div>
+      <div class="albedo-theme-card" data-theme="loki">
+        <div class="albedo-theme-preview">
+          <div class="albedo-theme-preview-half" style="background:#06160b"></div>
+          <div class="albedo-theme-preview-half" style="background:#22c55e"></div>
+        </div>
+        <div class="albedo-theme-name">Loki</div>
+        <div class="albedo-theme-desc">Hacker Green</div>
+      </div>
+      <div class="albedo-theme-card" data-theme="doctor">
+        <div class="albedo-theme-preview">
+          <div class="albedo-theme-preview-half" style="background:#051620"></div>
+          <div class="albedo-theme-preview-half" style="background:#06b6d4"></div>
+        </div>
+        <div class="albedo-theme-name">Doctor</div>
+        <div class="albedo-theme-desc">Medical Teal</div>
+      </div>
+      <div class="albedo-theme-card" data-theme="aizen">
+        <div class="albedo-theme-preview">
+          <div class="albedo-theme-preview-half" style="background:#1a0e03"></div>
+          <div class="albedo-theme-preview-half" style="background:#f59e0b"></div>
+        </div>
+        <div class="albedo-theme-name">Aizen</div>
+        <div class="albedo-theme-desc">Retrowave Gold</div>
+      </div>
+      <div class="albedo-theme-card" data-theme="sakura">
+        <div class="albedo-theme-preview">
+          <div class="albedo-theme-preview-half" style="background:#1e030c"></div>
+          <div class="albedo-theme-preview-half" style="background:#f43f5e"></div>
+        </div>
+        <div class="albedo-theme-name">Sakura</div>
+        <div class="albedo-theme-desc">Anime Crimson</div>
+      </div>
+      <div class="albedo-theme-card" data-theme="oled">
+        <div class="albedo-theme-preview">
+          <div class="albedo-theme-preview-half" style="background:#000000"></div>
+          <div class="albedo-theme-preview-half" style="background:#94a3b8"></div>
+        </div>
+        <div class="albedo-theme-name">OLED</div>
+        <div class="albedo-theme-desc">OLED Black</div>
+      </div>
+    </div>
+
+    <!-- BACKGROUND ANIMATIONS SECTION -->
+    <div class="albedo-theme-section-title">Background Visual</div>
+    <div class="albedo-bg-card" data-bg="particles">
+      <div class="albedo-bg-icon">✨</div>
+      <div class="albedo-bg-info">
+        <div class="albedo-bg-name">Particles</div>
+        <div class="albedo-bg-desc">Interactive node mesh</div>
+      </div>
+    </div>
+    <div class="albedo-bg-card" data-bg="matrix">
+      <div class="albedo-bg-icon">💻</div>
+      <div class="albedo-bg-info">
+        <div class="albedo-bg-name">Matrix Rain</div>
+        <div class="albedo-bg-desc">Vertical hacker digital streams</div>
+      </div>
+    </div>
+    <div class="albedo-bg-card" data-bg="hexagons">
+      <div class="albedo-bg-icon">⬢</div>
+      <div class="albedo-bg-info">
+        <div class="albedo-bg-name">Molecules</div>
+        <div class="albedo-bg-desc">Drifting chemical hexagon grids</div>
+      </div>
+    </div>
+    <div class="albedo-bg-card" data-bg="grid">
+      <div class="albedo-bg-icon">🌐</div>
+      <div class="albedo-bg-info">
+        <div class="albedo-bg-name">Retro Grid</div>
+        <div class="albedo-bg-desc">3D grid landscape horizon</div>
+      </div>
+    </div>
+    <div class="albedo-bg-card" data-bg="sakura">
+      <div class="albedo-bg-icon">🌸</div>
+      <div class="albedo-bg-info">
+        <div class="albedo-bg-name">Sakura Drift</div>
+        <div class="albedo-bg-desc">Swinging pink sakura petals</div>
+      </div>
+    </div>
+    <div class="albedo-bg-card" data-bg="none">
+      <div class="albedo-bg-icon">⬛</div>
+      <div class="albedo-bg-info">
+        <div class="albedo-bg-name">None (OLED Black)</div>
+        <div class="albedo-bg-desc">Static background (Save Performance)</div>
+      </div>
+    </div>
+
+    <!-- ADJUSTERS SECTION -->
+    <div class="albedo-theme-section-title" style="margin-top:24px">Engine Adjustments</div>
+    
+    <div class="albedo-control-group">
+      <div class="albedo-control-label">
+        <span>Animation Speed</span>
+        <span class="albedo-control-val" id="val-speed">1.0x</span>
+      </div>
+      <input type="range" class="albedo-slider" id="slider-speed" min="0.1" max="2.5" step="0.1" value="1.0">
+    </div>
+
+    <div class="albedo-control-group">
+      <div class="albedo-control-label">
+        <span>Glow Density</span>
+        <span class="albedo-control-val" id="val-density">1.0x</span>
+      </div>
+      <input type="range" class="albedo-slider" id="slider-density" min="0.2" max="2.0" step="0.1" value="1.0">
+    </div>
+
+    <div class="albedo-control-group">
+      <div class="albedo-control-label">
+        <span>Glow Opacity</span>
+        <span class="albedo-control-val" id="val-brightness">15%</span>
+      </div>
+      <input type="range" class="albedo-slider" id="slider-brightness" min="0.0" max="0.5" step="0.01" value="0.15">
+    </div>
+
+  </div>
+</div>
+
+<div class="albedo-theme-toggle" id="albedo-theme-toggle" title="Vessel Controls">
+  <svg viewBox="0 0 24 24">
+    <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+  </svg>
+</div>
+
+<script>
+(function() {
+  const canvas = document.getElementById('albedo-bg');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', () => {
+    resize();
+    // Reset caches on resize
+    particles.length = 0;
+    matrixColumns.length = 0;
+    hexagons.length = 0;
+    petals.length = 0;
+  });
+  resize();
+
+  const themeRGBs = {
+    albedo: '139, 92, 246',   // Purple
+    loki: '34, 197, 94',      // Green
+    doctor: '6, 182, 212',    // Teal
+    aizen: '245, 158, 11',    // Amber Gold
+    sakura: '244, 63, 94',    // Crimson Rose
+    oled: '148, 163, 184'     // Slate/Grey
+  };
+
+  // State Settings (Load from localStorage)
+  const settings = {
+    theme: localStorage.getItem('albedo-theme-key') || 'albedo',
+    bg: localStorage.getItem('albedo-bg-key') || 'particles',
+    speed: parseFloat(localStorage.getItem('albedo-speed-val') || '1.0'),
+    density: parseFloat(localStorage.getItem('albedo-density-val') || '1.0'),
+    brightness: parseFloat(localStorage.getItem('albedo-brightness-val') || '0.15')
+  };
+
+  let activeThemeRGB = themeRGBs[settings.theme] || '139, 92, 246';
+
+  // Animation Data Stores
+  const particles = [];
+  let matrixColumns = [];
+  const hexagons = [];
+  let gridOffset = 0;
+  const petals = [];
+
+  // ==========================================
+  // Background Animation 1: Particles (Albedo)
+  // ==========================================
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
+      this.vx = (Math.random() - 0.5) * 0.5;
+      this.vy = (Math.random() - 0.5) * 0.5;
+      this.r = Math.random() * 3 + 1;
+      this.alpha = Math.random() * 0.4 + 0.1;
+    }
+    update() {
+      this.x += this.vx * settings.speed;
+      this.y += this.vy * settings.speed;
+      if (this.x < 0 || this.x > W) this.vx *= -1;
+      if (this.y < 0 || this.y > H) this.vy *= -1;
+    }
+  }
+  function initParticles() {
+    particles.length = 0;
+    const count = Math.floor(75 * settings.density);
+    for (let i = 0; i < count; i++) particles.push(new Particle());
+  }
+  function drawParticles() {
+    if (particles.length === 0) initParticles();
+    ctx.clearRect(0, 0, W, H);
+
+    // Dynamic radial background glow
+    const grad = ctx.createRadialGradient(W*0.5, H*0.3, 0, W*0.5, H*0.3, Math.max(W,H)*0.8);
+    grad.addColorStop(0, `rgba(${activeThemeRGB}, ${settings.brightness})`);
+    grad.addColorStop(0.5, `rgba(${activeThemeRGB}, ${settings.brightness * 0.5})`);
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    // Draw Particles
+    for (const p of particles) {
+      p.update();
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${activeThemeRGB}, ${p.alpha})`;
+      ctx.fill();
+    }
+
+    // Connect close nodes
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 150) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(${activeThemeRGB}, ${0.06 * (1 - dist/150)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  // ==========================================
+  // Background Animation 2: Matrix Rain (Loki)
+  // ==========================================
+  function initMatrix() {
+    const fontSize = 14;
+    const cols = Math.floor(W / fontSize) + 1;
+    matrixColumns = Array(cols).fill(0).map(() => Math.random() * -100);
+  }
+  function drawMatrix() {
+    if (matrixColumns.length === 0) initMatrix();
+
+    ctx.fillStyle = `rgba(0, 0, 0, ${0.065 / settings.speed})`;
+    ctx.fillRect(0, 0, W, H);
+
+    const grad = ctx.createRadialGradient(W*0.5, H*0.3, 0, W*0.5, H*0.3, Math.max(W,H)*0.85);
+    grad.addColorStop(0, `rgba(${activeThemeRGB}, ${settings.brightness * 0.75})`);
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.fillStyle = `rgba(${activeThemeRGB}, 0.8)`;
+    ctx.font = '14px monospace';
+
+    const fontSize = 14;
+    const chars = '01010101010101010101LOKIALBEDO_SYSTEM_BYPASS';
+    for (let i = 0; i < matrixColumns.length; i++) {
+      if (Math.random() < 1 - settings.density * 0.8) continue;
+      const char = chars[Math.floor(Math.random() * chars.length)];
+      const x = i * fontSize;
+      const y = matrixColumns[i] * fontSize;
+
+      if (y > 0) {
+        if (Math.random() > 0.95) ctx.fillStyle = '#ffffff';
+        else ctx.fillStyle = `rgba(${activeThemeRGB}, 0.8)`;
+        ctx.fillText(char, x, y);
+      }
+
+      if (y > H && Math.random() > 0.975) {
+        matrixColumns[i] = 0;
+      } else {
+        matrixColumns[i] += settings.speed * 0.45;
+      }
+    }
+  }
+
+  // ==========================================
+  // Background Animation 3: Molecules (Doctor)
+  // ==========================================
+  class Hexagon {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
+      this.size = Math.random() * 22 + 12;
+      this.alpha = Math.random() * 0.2 + 0.05;
+      this.speed = (Math.random() * 0.12 + 0.06) * settings.speed;
+      this.angle = Math.random() * Math.PI * 2;
+      this.rotSpeed = (Math.random() - 0.5) * 0.002 * settings.speed;
+    }
+    update() {
+      this.x += Math.cos(this.angle) * this.speed;
+      this.y += Math.sin(this.angle) * this.speed;
+      this.angle += (Math.random() - 0.5) * 0.04;
+      if (this.x < -50 || this.x > W + 50 || this.y < -50 || this.y > H + 50) {
+        this.reset();
+      }
+    }
+    draw() {
+      ctx.beginPath();
+      for (let i = 0; i < 6; i++) {
+        const a = (this.rotSpeed * Date.now() * 0.05) + (i * Math.PI) / 3;
+        const hx = this.x + Math.cos(a) * this.size;
+        const hy = this.y + Math.sin(a) * this.size;
+        if (i === 0) ctx.moveTo(hx, hy);
+        else ctx.lineTo(hx, hy);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = `rgba(${activeThemeRGB}, ${this.alpha})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+  }
+  function initHexagons() {
+    hexagons.length = 0;
+    const count = Math.floor(25 * settings.density);
+    for (let i = 0; i < count; i++) hexagons.push(new Hexagon());
+  }
+  function drawHexagons() {
+    if (hexagons.length === 0) initHexagons();
+    ctx.clearRect(0, 0, W, H);
+
+    const grad = ctx.createRadialGradient(W*0.5, H*0.3, 0, W*0.5, H*0.3, Math.max(W,H)*0.8);
+    grad.addColorStop(0, `rgba(${activeThemeRGB}, ${settings.brightness})`);
+    grad.addColorStop(0.5, `rgba(${activeThemeRGB}, ${settings.brightness * 0.5})`);
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    for (const h of hexagons) {
+      h.update();
+      h.draw();
+    }
+
+    for (let i = 0; i < hexagons.length; i++) {
+      for (let j = i + 1; j < hexagons.length; j++) {
+        const dx = hexagons[i].x - hexagons[j].x;
+        const dy = hexagons[i].y - hexagons[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 180) {
+          ctx.beginPath();
+          ctx.moveTo(hexagons[i].x, hexagons[i].y);
+          ctx.lineTo(hexagons[j].x, hexagons[j].y);
+          ctx.strokeStyle = `rgba(${activeThemeRGB}, ${0.05 * (1 - dist/180)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  // ==========================================
+  // Background Animation 4: Retro Grid (Aizen)
+  // ==========================================
+  function drawGrid() {
+    ctx.clearRect(0, 0, W, H);
+
+    const grad = ctx.createLinearGradient(0, 0, 0, H);
+    grad.addColorStop(0, 'rgba(0,0,0,0)');
+    grad.addColorStop(0.3, `rgba(${activeThemeRGB}, ${settings.brightness * 0.65})`);
+    grad.addColorStop(0.7, `rgba(${activeThemeRGB}, ${settings.brightness * 0.85})`);
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    const horizon = H * 0.45;
+    gridOffset = (gridOffset + settings.speed * 0.6) % 30;
+
+    const lineCount = Math.floor(22 * settings.density);
+    for (let i = 0; i < lineCount; i++) {
+      const ratio = i / lineCount;
+      const y = horizon + (H - horizon) * Math.pow(ratio, 2.5) + gridOffset * ((H - horizon) * Math.pow(ratio, 2.5) * 0.015);
+      if (y > H) continue;
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(W, y);
+      const lineAlpha = 0.22 * ((y - horizon) / (H - horizon));
+      ctx.strokeStyle = `rgba(${activeThemeRGB}, ${lineAlpha})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    const center = W / 2;
+    const vLineCount = Math.floor(32 * settings.density);
+    for (let i = -vLineCount/2; i <= vLineCount/2; i++) {
+      ctx.beginPath();
+      ctx.moveTo(center, horizon);
+      const targetX = center + i * (W / 12);
+      ctx.lineTo(targetX, H);
+      ctx.strokeStyle = `rgba(${activeThemeRGB}, 0.12)`;
+      ctx.stroke();
+    }
+  }
+
+  // ==========================================
+  // Background Animation 5: Sakura (Sakura)
+  // ==========================================
+  class Petal {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * -100 - 10;
+      this.size = Math.random() * 8 + 5;
+      this.rot = Math.random() * Math.PI * 2;
+      this.rotSpeed = (Math.random() - 0.5) * 0.02;
+      this.vx = (Math.random() * 0.4 + 0.2);
+      this.vy = (Math.random() * 0.7 + 0.3);
+      this.sway = Math.random() * Math.PI * 2;
+      this.swaySpeed = Math.random() * 0.015 + 0.005;
+    }
+    update() {
+      this.x += (this.vx + Math.sin(this.sway) * 0.2) * settings.speed;
+      this.y += this.vy * settings.speed;
+      this.rot += this.rotSpeed * settings.speed;
+      this.sway += this.swaySpeed * settings.speed;
+      if (this.y > H + 20 || this.x > W + 20) {
+        this.reset();
+      }
+    }
+    draw() {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rot);
+
+      ctx.beginPath();
+      ctx.ellipse(0, 0, this.size, this.size * 0.6, 0, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${activeThemeRGB}, 0.6)`;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(-this.size, 0);
+      ctx.lineTo(this.size, 0);
+      ctx.strokeStyle = `rgba(${activeThemeRGB}, 0.75)`;
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+
+      ctx.restore();
+    }
+  }
+  function initSakura() {
+    petals.length = 0;
+    const count = Math.floor(45 * settings.density);
+    for (let i = 0; i < count; i++) petals.push(new Petal());
+  }
+  function drawSakura() {
+    if (petals.length === 0) initSakura();
+    ctx.clearRect(0, 0, W, H);
+
+    const grad = ctx.createLinearGradient(0, 0, W, H);
+    grad.addColorStop(0, `rgba(${activeThemeRGB}, ${settings.brightness * 0.75})`);
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    for (const p of petals) {
+      p.update();
+      p.draw();
+    }
+  }
+
+  // ==========================================
+  // Unified Animation Engine & State Router
+  // ==========================================
+  let animFrameId = null;
+  function startLoop() {
+    if (animFrameId) cancelAnimationFrame(animFrameId);
+    if (settings.bg === 'none') {
+      ctx.clearRect(0, 0, W, H);
+      return;
+    }
+    loop();
+  }
+
+  function loop() {
+    if (settings.bg === 'none') return;
+    animFrameId = requestAnimationFrame(loop);
+
+    activeThemeRGB = themeRGBs[settings.theme] || '139, 92, 246';
+
+    switch(settings.bg) {
+      case 'particles': drawParticles(); break;
+      case 'matrix': drawMatrix(); break;
+      case 'hexagons': drawHexagons(); break;
+      case 'grid': drawGrid(); break;
+      case 'sakura': drawSakura(); break;
+    }
+  }
+
+  // ==========================================
+  // DOM Controls & UI Event Observers
+  // ==========================================
+  const toggle = document.getElementById('albedo-theme-toggle');
+  const drawer = document.getElementById('albedo-theme-drawer');
+  const overlay = document.getElementById('albedo-theme-overlay');
+  const closeBtn = document.getElementById('albedo-theme-drawer-close');
+
+  function toggleDrawer() {
+    drawer.classList.toggle('active');
+    overlay.classList.toggle('active');
+  }
+  toggle.addEventListener('click', toggleDrawer);
+  closeBtn.addEventListener('click', toggleDrawer);
+  overlay.addEventListener('click', toggleDrawer);
+
+  function applyTheme(themeKey) {
+    document.documentElement.classList.remove('theme-albedo', 'theme-loki', 'theme-doctor', 'theme-aizen', 'theme-sakura', 'theme-oled');
+    document.documentElement.classList.add('theme-' + themeKey);
+
+    settings.theme = themeKey;
+    localStorage.setItem('albedo-theme-key', themeKey);
+
+    document.querySelectorAll('.albedo-theme-card').forEach(card => {
+      const active = card.getAttribute('data-theme') === themeKey;
+      card.classList.toggle('active', active);
+      if (active) {
+        const rgb = themeRGBs[themeKey];
+        card.style.setProperty('--theme-active-color', `rgb(${rgb})`);
+        card.style.setProperty('--theme-active-rgb', rgb);
+      }
+    });
+
+    toggle.style.setProperty('--theme-primary-color', `rgb(${themeRGBs[themeKey]})`);
+    toggle.style.setProperty('--theme-active-rgb', themeRGBs[themeKey]);
+    
+    // Dynamically retint background card indicators
+    document.querySelectorAll('.albedo-bg-card').forEach(card => {
+      if (card.classList.contains('active')) {
+        const rgb = themeRGBs[themeKey];
+        card.style.setProperty('--theme-active-color', `rgb(${rgb})`);
+        card.style.setProperty('--theme-active-rgb', rgb);
+      }
+    });
+  }
+
+  function applyBackground(bgKey) {
+    settings.bg = bgKey;
+    localStorage.setItem('albedo-bg-key', bgKey);
+
+    document.querySelectorAll('.albedo-bg-card').forEach(card => {
+      const active = card.getAttribute('data-bg') === bgKey;
+      card.classList.toggle('active', active);
+      if (active) {
+        const rgb = themeRGBs[settings.theme];
+        card.style.setProperty('--theme-active-color', `rgb(${rgb})`);
+        card.style.setProperty('--theme-active-rgb', rgb);
+      }
+    });
+
+    particles.length = 0;
+    matrixColumns.length = 0;
+    hexagons.length = 0;
+    petals.length = 0;
+
+    startLoop();
+  }
+
+  document.querySelectorAll('.albedo-theme-card').forEach(card => {
+    card.addEventListener('click', () => {
+      applyTheme(card.getAttribute('data-theme'));
+    });
+  });
+
+  document.querySelectorAll('.albedo-bg-card').forEach(card => {
+    card.addEventListener('click', () => {
+      applyBackground(card.getAttribute('data-bg'));
+    });
+  });
+
+  // Bind Adjusters
+  const speedSlider = document.getElementById('slider-speed');
+  const valSpeed = document.getElementById('val-speed');
+  speedSlider.addEventListener('input', (e) => {
+    settings.speed = parseFloat(e.target.value);
+    valSpeed.textContent = settings.speed.toFixed(1) + 'x';
+    localStorage.setItem('albedo-speed-val', settings.speed);
+  });
+
+  const densitySlider = document.getElementById('slider-density');
+  const valDensity = document.getElementById('val-density');
+  densitySlider.addEventListener('input', (e) => {
+    settings.density = parseFloat(e.target.value);
+    valDensity.textContent = settings.density.toFixed(1) + 'x';
+    localStorage.setItem('albedo-density-val', settings.density);
+    // Reset buffers to dynamically adapt size counts
+    particles.length = 0;
+    hexagons.length = 0;
+    petals.length = 0;
+  });
+
+  const brightnessSlider = document.getElementById('slider-brightness');
+  const valBrightness = document.getElementById('val-brightness');
+  brightnessSlider.addEventListener('input', (e) => {
+    settings.brightness = parseFloat(e.target.value);
+    valBrightness.textContent = Math.round(settings.brightness * 100) + '%';
+    localStorage.setItem('albedo-brightness-val', settings.brightness);
+  });
+
+  // Intercept Fetch for Tavily Search
+  try {
+    const originalFetch = window.fetch;
+    window.fetch = async function(url, options) {
+      if (typeof url === 'string' && url.includes('api.tavily.com/search')) {
+        try {
+          const body = JSON.parse(options.body);
+          const query = body.query;
+          console.log("[Albedo-Search] Intercepted Tavily query:", query);
+          if (window.albedoBridge && typeof window.albedoBridge.webSearch === 'function') {
+            const results = await window.albedoBridge.webSearch(query);
+            return new Response(JSON.stringify({ results }), {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          }
+        } catch(e) {
+          console.error("[Albedo-Search] Fetch interception error:", e.message);
+        }
+      }
+      return originalFetch.apply(this, arguments);
+    };
+    console.log("[Albedo-Search] Fetch interceptor active!");
+  } catch(e) {
+    console.error("[Albedo-Search] Failed to initialize interceptor:", e);
+  }
+
+  // Load initial settings
+  applyTheme(settings.theme);
+  applyBackground(settings.bg);
+
+  speedSlider.value = settings.speed;
+  valSpeed.textContent = settings.speed.toFixed(1) + 'x';
+
+  densitySlider.value = settings.density;
+  valDensity.textContent = settings.density.toFixed(1) + 'x';
+
+  brightnessSlider.value = settings.brightness;
+  valBrightness.textContent = Math.round(settings.brightness * 100) + '%';
+})();
+</script>
+
+<!-- Study Deck Overlay -->
+<div class="albedo-study-overlay" id="albedo-study-overlay"></div>
+
+<!-- Floating Toggle Button -->
+<div class="albedo-study-toggle" id="albedo-study-toggle" title="Study Tools (Timer & Music)">
+  <svg viewBox="0 0 24 24">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+  </svg>
+</div>
+
+<!-- Study Drawer -->
+<div class="albedo-study-drawer" id="albedo-study-drawer">
+  <!-- Drawer Header -->
+  <div class="albedo-study-drawer-header">
+    <div>
+      <h3>STUDY MODULE</h3>
+      <p>Enhance cognitive focus</p>
+    </div>
+    <button class="albedo-study-drawer-close" id="albedo-study-drawer-close">&times;</button>
+  </div>
+  
+  <div class="albedo-study-drawer-content">
+    
+    <!-- TIMER SECTION -->
+    <div class="albedo-study-section">
+      <div class="albedo-study-section-title">Timer & Focus</div>
+      
+      <!-- Timer Tabs (Modes) -->
+      <div class="albedo-timer-tabs">
+        <button class="albedo-timer-tab active" data-mode="pomodoro">Pomodoro</button>
+        <button class="albedo-timer-tab" data-mode="short">Short Break</button>
+        <button class="albedo-timer-tab" data-mode="long">Long Break</button>
+        <button class="albedo-timer-tab" data-mode="stopwatch">Stopwatch</button>
+      </div>
+      
+      <!-- Circular Progress & Display Card -->
+      <div class="albedo-timer-card">
+        <div class="albedo-circular-timer">
+          <svg class="albedo-timer-svg" viewBox="0 0 100 100">
+            <circle class="bg" cx="50" cy="50" r="45"></circle>
+            <circle class="progress" id="albedo-timer-progress-ring" cx="50" cy="50" r="45"></circle>
+          </svg>
+          <div class="albedo-timer-display" id="albedo-timer-display">25:00</div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="albedo-timer-controls">
+          <button class="albedo-timer-btn primary" id="albedo-timer-start-btn">Start</button>
+          <button class="albedo-timer-btn" id="albedo-timer-reset-btn">Reset</button>
+        </div>
+      </div>
+      
+      <!-- Presets and Custom Inputs -->
+      <div id="albedo-timer-presets-container">
+        <!-- Preset Minutes -->
+        <div class="albedo-timer-presets">
+          <button class="albedo-preset-btn" data-min="5">5m</button>
+          <button class="albedo-preset-btn" data-min="15">15m</button>
+          <button class="albedo-preset-btn" data-min="25">25m</button>
+          <button class="albedo-preset-btn" data-min="30">30m</button>
+          <button class="albedo-preset-btn" data-min="60">60m</button>
+        </div>
+        
+        <!-- Custom Input -->
+        <div class="albedo-custom-time">
+          <input type="number" id="albedo-custom-minutes" min="1" max="999" placeholder="Custom min...">
+          <button id="albedo-custom-time-btn">Set</button>
+        </div>
+      </div>
+      
+      <!-- Session stats -->
+      <div class="albedo-session-stats" id="albedo-session-stats">Sessions Completed: <span id="albedo-pomodoro-count">0</span></div>
+    </div>
+    
+    <!-- MUSIC PLAYER SECTION -->
+    <div class="albedo-study-section">
+      <div class="albedo-study-section-title">Focus Music Player</div>
+      
+      <!-- Disc & Info Card -->
+      <div class="albedo-music-card">
+        <div class="albedo-music-disc-container">
+          <div class="albedo-music-disc" id="albedo-music-disc">
+            <span>🎵</span>
+          </div>
+        </div>
+        
+        <div class="albedo-track-info">
+          <div class="albedo-track-title" id="albedo-track-title">No track loaded</div>
+          <div class="albedo-track-source" id="albedo-track-source">0 tracks in queue</div>
+        </div>
+        
+        <!-- Playback Option toggles -->
+        <div class="albedo-playback-options">
+          <button class="albedo-opt-btn" id="albedo-opt-shuffle" title="Shuffle Mode Off">🔀 Shuffle</button>
+          <button class="albedo-opt-btn" id="albedo-opt-repeat" title="Repeat Playlist">🔁 Repeat All</button>
+        </div>
+        
+        <!-- Audio controls -->
+        <div class="albedo-audio-controls">
+          <button class="albedo-audio-btn" id="albedo-audio-prev-btn" title="Previous Track">⏮</button>
+          <button class="albedo-audio-btn primary" id="albedo-audio-play-btn" title="Play/Pause">▶</button>
+          <button class="albedo-audio-btn" id="albedo-audio-next-btn" title="Next Track">⏭</button>
+        </div>
+        
+        <!-- Volume controls -->
+        <div class="albedo-volume-container">
+          <span class="albedo-vol-icon" id="albedo-vol-mute-btn">🔊</span>
+          <input type="range" id="albedo-volume-slider" class="albedo-volume-slider" min="0" max="100" value="50">
+          <span class="albedo-vol-text" id="albedo-vol-text">50%</span>
+        </div>
+      </div>
+      
+      <!-- Upload Audio Area -->
+      <div class="albedo-upload-section">
+        <div class="albedo-upload-title">Add Audio Files or Folders</div>
+        <div class="albedo-upload-buttons">
+          <button class="albedo-upload-btn" id="albedo-add-files-btn">📂 Select Files</button>
+          <button class="albedo-upload-btn" id="albedo-add-folder-btn">📁 Select Folder</button>
+        </div>
+        <div class="albedo-dropzone" id="albedo-music-dropzone">
+          <span class="icon">📥</span>
+          <p>Drag & drop audio files here</p>
+          <input type="file" id="albedo-music-file-input" accept="audio/*" multiple style="display:none">
+          <input type="file" id="albedo-music-folder-input" accept="audio/*" webkitdirectory directory multiple style="display:none">
+        </div>
+      </div>
+      
+      <!-- Playlist Queue -->
+      <div class="albedo-playlist-container" id="albedo-playlist-container" style="display:none">
+        <div class="albedo-playlist-header">
+          <span>QUEUE PLAYLIST</span>
+          <button class="albedo-playlist-clear" id="albedo-playlist-clear-btn">Clear All</button>
+        </div>
+        <ul class="albedo-playlist-list" id="albedo-playlist-list">
+          <!-- Playlist items injected dynamically -->
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Hidden local HTML5 audio element -->
+<audio id="albedo-hidden-audio-el" style="display:none"></audio>
+
+<div id=root></div><div class=splash-screen><div class=splash-screen-top></div><div class=splash-screen-content><div style="text-align:center"><div class=splash-screen-logo-bg style="font-size:280px;font-weight:900;opacity:0.08;color:#c8a0ff;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;user-select:none">A</div><div style="font-size:64px;color:#c8a0ff;filter:drop-shadow(0 0 30px rgba(150,60,200,0.6));line-height:1">A</div><div class=splash-screen-title>ALBEDO CHAT</div><div class=splash-screen-subtitle>powered by Dr. Ahmed</div></div><div class=splash-screen-bottom id=log-root></div></div>
+<script>
+// ============================================================================
+// ALBEDO STUDY TOOLS JAVASCRIPT v2.0
+// ============================================================================
+(function() {
+  // DOM Elements
+  const studyToggle = document.getElementById('albedo-study-toggle');
+  const studyDrawer = document.getElementById('albedo-study-drawer');
+  const studyOverlay = document.getElementById('albedo-study-overlay');
+  const studyCloseBtn = document.getElementById('albedo-study-drawer-close');
+
+  const timerTabs = document.querySelectorAll('.albedo-timer-tab');
+  const timerDisplay = document.getElementById('albedo-timer-display');
+  const timerProgressRing = document.getElementById('albedo-timer-progress-ring');
+  const timerStartBtn = document.getElementById('albedo-timer-start-btn');
+  const timerResetBtn = document.getElementById('albedo-timer-reset-btn');
+  const presetsContainer = document.getElementById('albedo-timer-presets-container');
+  const presetBtns = document.querySelectorAll('.albedo-preset-btn');
+  const customMinInput = document.getElementById('albedo-custom-minutes');
+  const customTimeBtn = document.getElementById('albedo-custom-time-btn');
+  const pomodoroCountSpan = document.getElementById('albedo-pomodoro-count');
+  const sessionStatsDiv = document.getElementById('albedo-session-stats');
+
+  const musicDisc = document.getElementById('albedo-music-disc');
+  const trackTitle = document.getElementById('albedo-track-title');
+  const trackSource = document.getElementById('albedo-track-source');
+  const playBtn = document.getElementById('albedo-audio-play-btn');
+  const prevBtn = document.getElementById('albedo-audio-prev-btn');
+  const nextBtn = document.getElementById('albedo-audio-next-btn');
+  const volumeSlider = document.getElementById('albedo-volume-slider');
+  const volumeText = document.getElementById('albedo-vol-text');
+  const muteBtn = document.getElementById('albedo-vol-mute-btn');
+  
+  const optShuffle = document.getElementById('albedo-opt-shuffle');
+  const optRepeat = document.getElementById('albedo-opt-repeat');
+
+  const addFilesBtn = document.getElementById('albedo-add-files-btn');
+  const addFolderBtn = document.getElementById('albedo-add-folder-btn');
+  const dropzone = document.getElementById('albedo-music-dropzone');
+  const fileInput = document.getElementById('albedo-music-file-input');
+  const folderInput = document.getElementById('albedo-music-folder-input');
+  
+  const playlistContainer = document.getElementById('albedo-playlist-container');
+  const playlistList = document.getElementById('albedo-playlist-list');
+  const clearPlaylistBtn = document.getElementById('albedo-playlist-clear-btn');
+  
+  const localAudioEl = document.getElementById('albedo-hidden-audio-el');
+
+  // Player State
+  let playlist = [];
+  let currentTrackIndex = -1;
+  let isPlaying = false;
+  let currentVolume = parseFloat(localStorage.getItem('albedo-study-volume') || '50') / 100;
+  let isMuted = localStorage.getItem('albedo-study-muted') === 'true';
+  
+  let isShuffle = localStorage.getItem('albedo-study-shuffle') === 'true';
+  let repeatMode = localStorage.getItem('albedo-study-repeat-mode') || 'all'; // 'all', 'one', 'none'
+  let shuffleList = [];
+
+  // Timer State
+  let timerInterval = null;
+  let timerMode = 'pomodoro'; // 'pomodoro', 'short', 'long', 'stopwatch'
+  let timerTimeLeft = 25 * 60; // default 25 min in seconds
+  let timerDuration = 25 * 60;
+  let timerIsRunning = false;
+  let pomodoroCompletedCount = parseInt(localStorage.getItem('albedo-pomodoro-count') || '0', 10);
+  let stopwatchSeconds = 0;
+
+  // Initialize UI Values
+  volumeSlider.value = Math.round(currentVolume * 100);
+  volumeText.textContent = volumeSlider.value + '%';
+  muteBtn.textContent = isMuted ? '❌' : '🔊';
+  pomodoroCountSpan.textContent = pomodoroCompletedCount;
+  
+  // Set initial volume on audio element
+  localAudioEl.volume = isMuted ? 0 : currentVolume;
+
+  // Sync Shuffle / Repeat buttons UI
+  updateShuffleUI();
+  updateRepeatUI();
+
+  // --- DRAWER OPEN/CLOSE ---
+  function openStudyDrawer() {
+    studyDrawer.classList.add('active');
+    studyOverlay.classList.add('active');
+  }
+
+  function closeStudyDrawer() {
+    studyDrawer.classList.remove('active');
+    studyOverlay.classList.remove('active');
+  }
+
+  studyToggle.addEventListener('click', openStudyDrawer);
+  studyCloseBtn.addEventListener('click', closeStudyDrawer);
+  studyOverlay.addEventListener('click', closeStudyDrawer);
+
+  // --- TIMER LOGIC ---
+  const TIMER_PRESETS = {
+    pomodoro: 25 * 60,
+    short: 5 * 60,
+    long: 15 * 60
+  };
+
+  function updateTimerUI() {
+    let minutes = 0;
+    let seconds = 0;
+    
+    if (timerMode === 'stopwatch') {
+      minutes = Math.floor(stopwatchSeconds / 60);
+      seconds = stopwatchSeconds % 60;
+      timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      timerProgressRing.style.strokeDashoffset = 0;
+    } else {
+      minutes = Math.floor(timerTimeLeft / 60);
+      seconds = timerTimeLeft % 60;
+      timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      
+      const percent = (timerTimeLeft / timerDuration) * 100;
+      const offset = 283 - (percent / 100) * 283;
+      timerProgressRing.style.strokeDashoffset = offset;
+    }
+  }
+
+  function playTripleBeep() {
+    try {
+      const beepCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const playBeep = (delay) => {
+        const osc = beepCtx.createOscillator();
+        const gain = beepCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = 880; 
+        gain.gain.setValueAtTime(0, beepCtx.currentTime + delay);
+        gain.gain.linearRampToValueAtTime(0.2, beepCtx.currentTime + delay + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, beepCtx.currentTime + delay + 0.15);
+        osc.connect(gain);
+        gain.connect(beepCtx.destination);
+        osc.start(beepCtx.currentTime + delay);
+        osc.stop(beepCtx.currentTime + delay + 0.16);
+      };
+      playBeep(0);
+      playBeep(0.2);
+      playBeep(0.4);
+    } catch(e) {
+      console.error("Failed to play timer beep:", e);
+    }
+  }
+
+  function handleTimerComplete() {
+    clearInterval(timerInterval);
+    timerIsRunning = false;
+    timerStartBtn.textContent = 'Start';
+    timerStartBtn.classList.remove('active');
+    
+    playTripleBeep();
+    
+    if (timerMode === 'pomodoro') {
+      pomodoroCompletedCount++;
+      localStorage.setItem('albedo-pomodoro-count', pomodoroCompletedCount);
+      pomodoroCountSpan.textContent = pomodoroCompletedCount;
+    }
+    
+    timerTimeLeft = TIMER_PRESETS[timerMode] || 25 * 60;
+    updateTimerUI();
+  }
+
+  function runTimer() {
+    if (timerMode === 'stopwatch') {
+      stopwatchSeconds++;
+    } else {
+      if (timerTimeLeft > 0) {
+        timerTimeLeft--;
+      } else {
+        handleTimerComplete();
+      }
+    }
+    updateTimerUI();
+  }
+
+  function startTimer() {
+    if (timerIsRunning) {
+      clearInterval(timerInterval);
+      timerIsRunning = false;
+      timerStartBtn.textContent = 'Start';
+      timerStartBtn.classList.remove('active');
+    } else {
+      timerIsRunning = true;
+      timerStartBtn.textContent = 'Pause';
+      timerStartBtn.classList.add('active');
+      timerInterval = setInterval(runTimer, 1000);
+    }
+  }
+
+  function resetTimer() {
+    clearInterval(timerInterval);
+    timerIsRunning = false;
+    timerStartBtn.textContent = 'Start';
+    timerStartBtn.classList.remove('active');
+    
+    if (timerMode === 'stopwatch') {
+      stopwatchSeconds = 0;
+    } else {
+      timerTimeLeft = timerDuration;
+    }
+    updateTimerUI();
+  }
+
+  timerTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      timerTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      
+      const newMode = tab.getAttribute('data-mode');
+      if (newMode === timerMode) return;
+      
+      timerMode = newMode;
+      resetTimer();
+      
+      if (timerMode === 'stopwatch') {
+        presetsContainer.style.display = 'none';
+        sessionStatsDiv.style.display = 'none';
+      } else {
+        presetsContainer.style.display = 'block';
+        sessionStatsDiv.style.display = (timerMode === 'pomodoro') ? 'block' : 'none';
+        
+        timerDuration = TIMER_PRESETS[timerMode];
+        timerTimeLeft = timerDuration;
+      }
+      updateTimerUI();
+    });
+  });
+
+  presetBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const minutes = parseInt(btn.getAttribute('data-min'), 10);
+      timerDuration = minutes * 60;
+      timerTimeLeft = timerDuration;
+      resetTimer();
+    });
+  });
+
+  customTimeBtn.addEventListener('click', () => {
+    const val = parseInt(customMinInput.value, 10);
+    if (isNaN(val) || val <= 0) return;
+    timerDuration = val * 60;
+    timerTimeLeft = timerDuration;
+    resetTimer();
+    customMinInput.value = '';
+  });
+
+  timerStartBtn.addEventListener('click', startTimer);
+  timerResetBtn.addEventListener('click', resetTimer);
+  
+  updateTimerUI();
+
+
+  // --- MUSIC PLAYER PLAYLIST & CONTROLS ---
+
+  function addFilesToPlaylist(files) {
+    if (!files || files.length === 0) return;
+    
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      // Match common audio types or extensions
+      if (file.type.startsWith('audio/') || file.name.endsWith('.mp3') || file.name.endsWith('.wav') || file.name.endsWith('.m4a') || file.name.endsWith('.ogg') || file.name.endsWith('.flac')) {
+        // Strip extension
+        const prettyName = file.name.replace(/\.[^/.]+$/, "");
+        playlist.push({
+          file: file,
+          name: prettyName
+        });
+      }
+    }
+    
+    if (playlist.length > 0) {
+      playlistContainer.style.display = 'flex';
+      renderPlaylist();
+      
+      if (isShuffle) {
+        regenerateShuffleList();
+      }
+      
+      // If nothing is playing, load first track
+      if (currentTrackIndex === -1) {
+        loadTrack(0, false);
+      } else {
+        // Just update count
+        trackSource.textContent = `Track ${currentTrackIndex + 1} of ${playlist.length}`;
+      }
+    }
+  }
+
+  function renderPlaylist() {
+    playlistList.innerHTML = '';
+    
+    playlist.forEach((track, index) => {
+      const li = document.createElement('li');
+      li.className = 'albedo-playlist-item';
+      if (index === currentTrackIndex) {
+        li.classList.add('active');
+      }
+      
+      li.innerHTML = `
+        <div class="albedo-playlist-item-left">
+          <span class="albedo-playlist-item-index">${index + 1}</span>
+          <span class="albedo-playlist-item-name">${track.name}</span>
+        </div>
+        <span class="albedo-playlist-play-icon">▶</span>
+      `;
+      
+      li.addEventListener('click', () => {
+        loadTrack(index, true);
+      });
+      
+      playlistList.appendChild(li);
+    });
+  }
+
+  function loadTrack(index, autoPlay = true) {
+    if (index < 0 || index >= playlist.length) return;
+    
+    currentTrackIndex = index;
+    const track = playlist[index];
+    
+    const objectUrl = URL.createObjectURL(track.file);
+    localAudioEl.src = objectUrl;
+    
+    trackTitle.textContent = track.name;
+    trackSource.textContent = `Track ${index + 1} of ${playlist.length}`;
+    
+    // Highlight active list item
+    const items = document.querySelectorAll('.albedo-playlist-item');
+    items.forEach((item, idx) => {
+      if (idx === index) {
+        item.classList.add('active');
+        item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      } else {
+        item.classList.remove('active');
+      }
+    });
+    
+    if (autoPlay) {
+      isPlaying = true;
+      playBtn.textContent = '⏸';
+      musicDisc.classList.add('playing');
+      localAudioEl.play().catch(err => {
+        console.error("Audio playback blocked or failed:", err);
+      });
+    } else {
+      isPlaying = false;
+      playBtn.textContent = '▶';
+      musicDisc.classList.remove('playing');
+    }
+  }
+
+  function togglePlay() {
+    if (playlist.length === 0) return;
+    
+    if (isPlaying) {
+      isPlaying = false;
+      playBtn.textContent = '▶';
+      musicDisc.classList.remove('playing');
+      localAudioEl.pause();
+    } else {
+      isPlaying = true;
+      playBtn.textContent = '⏸';
+      musicDisc.classList.add('playing');
+      
+      if (currentTrackIndex === -1) {
+        loadTrack(0, true);
+      } else {
+        localAudioEl.play().catch(err => {
+          console.error("Audio playback failed:", err);
+        });
+      }
+    }
+  }
+
+  function regenerateShuffleList() {
+    shuffleList = [];
+    for (let i = 0; i < playlist.length; i++) {
+      shuffleList.push(i);
+    }
+    // Fisher-Yates shuffle
+    for (let i = shuffleList.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffleList[i], shuffleList[j]] = [shuffleList[j], shuffleList[i]];
+    }
+    // Remove current index from shuffle pool so we don't repeat immediately
+    const currPos = shuffleList.indexOf(currentTrackIndex);
+    if (currPos !== -1) {
+      shuffleList.splice(currPos, 1);
+    }
+  }
+
+  function playNextTrack() {
+    if (playlist.length === 0) return;
+    
+    if (repeatMode === 'one') {
+      loadTrack(currentTrackIndex, true);
+      return;
+    }
+    
+    if (isShuffle) {
+      if (shuffleList.length === 0) {
+        regenerateShuffleList();
+      }
+      if (shuffleList.length > 0) {
+        const nextIdx = shuffleList.pop();
+        loadTrack(nextIdx, true);
+      } else {
+        // fallback
+        loadTrack((currentTrackIndex + 1) % playlist.length, true);
+      }
+    } else {
+      let nextIdx = currentTrackIndex + 1;
+      if (nextIdx >= playlist.length) {
+        if (repeatMode === 'all') {
+          nextIdx = 0;
+          loadTrack(nextIdx, true);
+        } else {
+          // stop at the end
+          isPlaying = false;
+          playBtn.textContent = '▶';
+          musicDisc.classList.remove('playing');
+          localAudioEl.pause();
+        }
+      } else {
+        loadTrack(nextIdx, true);
+      }
+    }
+  }
+
+  function playPrevTrack() {
+    if (playlist.length === 0) return;
+    
+    if (repeatMode === 'one') {
+      loadTrack(currentTrackIndex, true);
+      return;
+    }
+    
+    if (isShuffle) {
+      if (shuffleList.length === 0) {
+        regenerateShuffleList();
+      }
+      if (shuffleList.length > 0) {
+        const prevIdx = shuffleList.pop();
+        loadTrack(prevIdx, true);
+      } else {
+        loadTrack((currentTrackIndex - 1 + playlist.length) % playlist.length, true);
+      }
+    } else {
+      let prevIdx = currentTrackIndex - 1;
+      if (prevIdx < 0) {
+        if (repeatMode === 'all') {
+          prevIdx = playlist.length - 1;
+          loadTrack(prevIdx, true);
+        } else {
+          loadTrack(0, true);
+        }
+      } else {
+        loadTrack(prevIdx, true);
+      }
+    }
+  }
+
+  function clearPlaylist() {
+    localAudioEl.pause();
+    localAudioEl.src = '';
+    playlist = [];
+    currentTrackIndex = -1;
+    shuffleList = [];
+    isPlaying = false;
+    
+    playBtn.textContent = '▶';
+    musicDisc.classList.remove('playing');
+    trackTitle.textContent = "No track loaded";
+    trackSource.textContent = "0 tracks in queue";
+    
+    playlistList.innerHTML = '';
+    playlistContainer.style.display = 'none';
+  }
+
+  // --- VOLUME CONTROLS ---
+  function changeVolume(val) {
+    currentVolume = val / 100;
+    localStorage.setItem('albedo-study-volume', val);
+    volumeText.textContent = Math.round(val) + '%';
+    
+    if (isMuted) {
+      isMuted = false;
+      localStorage.setItem('albedo-study-muted', 'false');
+      muteBtn.textContent = '🔊';
+    }
+
+    localAudioEl.volume = currentVolume;
+  }
+
+  function toggleMute() {
+    if (isMuted) {
+      isMuted = false;
+      localStorage.setItem('albedo-study-muted', 'false');
+      muteBtn.textContent = '🔊';
+      localAudioEl.volume = currentVolume;
+    } else {
+      isMuted = true;
+      localStorage.setItem('albedo-study-muted', 'true');
+      muteBtn.textContent = '❌';
+      localAudioEl.volume = 0;
+    }
+  }
+
+  // --- SHUFFLE & REPEAT OPTIONS ---
+  function toggleShuffle() {
+    isShuffle = !isShuffle;
+    localStorage.setItem('albedo-study-shuffle', isShuffle ? 'true' : 'false');
+    updateShuffleUI();
+    if (isShuffle) {
+      regenerateShuffleList();
+    }
+  }
+
+  function updateShuffleUI() {
+    if (isShuffle) {
+      optShuffle.classList.add('active');
+      optShuffle.title = "Shuffle Mode On";
+    } else {
+      optShuffle.classList.remove('active');
+      optShuffle.title = "Shuffle Mode Off";
+    }
+  }
+
+  function toggleRepeat() {
+    if (repeatMode === 'all') {
+      repeatMode = 'one';
+    } else if (repeatMode === 'one') {
+      repeatMode = 'none';
+    } else {
+      repeatMode = 'all';
+    }
+    localStorage.setItem('albedo-study-repeat-mode', repeatMode);
+    updateRepeatUI();
+  }
+
+  function updateRepeatUI() {
+    if (repeatMode === 'all') {
+      optRepeat.classList.add('active');
+      optRepeat.innerHTML = "🔁 Repeat All";
+      optRepeat.title = "Repeat Playlist Mode";
+    } else if (repeatMode === 'one') {
+      optRepeat.classList.add('active');
+      optRepeat.innerHTML = "🔂 Repeat One";
+      optRepeat.title = "Repeat Single Song Mode";
+    } else {
+      optRepeat.classList.remove('active');
+      optRepeat.innerHTML = "➡️ Play Order";
+      optRepeat.title = "No Repeat Mode (Order)";
+    }
+  }
+
+  // --- UPLOAD & DROPZONE EVENT BINDINGS ---
+  addFilesBtn.addEventListener('click', () => fileInput.click());
+  addFolderBtn.addEventListener('click', () => folderInput.click());
+
+  fileInput.addEventListener('change', () => {
+    addFilesToPlaylist(fileInput.files);
+  });
+  
+  folderInput.addEventListener('change', () => {
+    addFilesToPlaylist(folderInput.files);
+  });
+
+  dropzone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropzone.style.borderColor = 'var(--theme-primary-color, #8b5cf6)';
+  });
+  dropzone.addEventListener('dragleave', () => {
+    dropzone.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+  });
+  dropzone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropzone.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+    addFilesToPlaylist(e.dataTransfer.files);
+  });
+  dropzone.addEventListener('click', () => fileInput.click());
+
+  clearPlaylistBtn.addEventListener('click', clearPlaylist);
+
+  // --- CONTROLS EVENT BINDINGS ---
+  playBtn.addEventListener('click', togglePlay);
+  prevBtn.addEventListener('click', playPrevTrack);
+  nextBtn.addEventListener('click', playNextTrack);
+  
+  volumeSlider.addEventListener('input', (e) => changeVolume(e.target.value));
+  muteBtn.addEventListener('click', toggleMute);
+  
+  optShuffle.addEventListener('click', toggleShuffle);
+  optRepeat.addEventListener('click', toggleRepeat);
+
+  // When track ends naturally
+  localAudioEl.addEventListener('ended', playNextTrack);
+
+})();
+</script>
+
+</body></html>

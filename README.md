@@ -1,353 +1,132 @@
-<p align="right">
-  <a href="README.md">English</a> |
-  <a href="./doc/README-CN.md">简体中文</a>
-</p>
+# Chatbox Modified
 
-<h1 align="center">
-<img src='./doc/statics/icon.png' width='30'>
-<span>
-    Chatbox
-    <span style="font-size:8px; font-weight: normal;">(Community Edition)</span>
-</span>
-</h1>
-<p align="center">
-    <em>Your Ultimate AI Copilot on the Desktop. <br />Chatbox is a desktop client for ChatGPT, Claude and other LLMs, available on Windows, Mac, Linux</em>
-</p>
+> A fork of [Chatbox Community Edition](https://github.com/chatboxai/chatbox) — the same powerful AI client, enhanced with a theme engine, background animations, study tools, and IPC bridge capabilities.
 
-<p align="center">
-<a href="https://github.com/chatboxai/chatbox/releases" target="_blank">
-<img alt="macOS" src="https://img.shields.io/badge/-macOS-black?style=flat-square&logo=apple&logoColor=white" />
-</a>
-<a href="https://github.com/chatboxai/chatbox/releases" target="_blank">
-<img alt="Windows" src="https://img.shields.io/badge/-Windows-blue?style=flat-square&logo=windows&logoColor=white" />
-</a>
-<a href="https://github.com/chatboxai/chatbox/releases" target="_blank">
-<img alt="Linux" src="https://img.shields.io/badge/-Linux-yellow?style=flat-square&logo=linux&logoColor=white" />
-</a>
-<a href="https://github.com/chatboxai/chatbox/releases" target="_blank">
-<img alt="Downloads" src="https://img.shields.io/github/downloads/chatboxai/chatbox/total.svg?style=flat" />
-</a>
-<a href="#features">
-<img alt="Privacy" src="https://img.shields.io/badge/-Local%20First-green?style=flat-square&logo=shield&logoColor=white" />
-</a>
-</p>
+## What is This?
 
-<p align="center">
-<a href="https://www.producthunt.com/posts/chatbox?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-chatbox" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=429547&theme=light" alt="Chatbox - Better&#0032;UI&#0032;&#0038;&#0032;Desktop&#0032;App&#0032;for&#0032;ChatGPT&#0044;&#0032;Claude&#0032;and&#0032;other&#0032;LLMs&#0046; | Product Hunt" style="width: 150px; height: 30px;" width="100" height="40" /></a>
-<a href="https://trendshift.io/repositories/14871" target="_blank"><img src="https://trendshift.io/api/badge/repositories/14871" alt="chatboxai%2Fchatbox | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
-</p>
+This repository contains the **prebuilt, modified version** of Chatbox — an Electron-based desktop client for ChatGPT, Claude, Gemini, and other LLMs. The modifications are applied directly to the compiled app bundle (not the TypeScript source), adding visual customization, focus tools, and external communication capabilities.
 
-<p align="center">
-  <a href="./doc/statics/snapshot_light.png">
-    <img src="./doc/statics/snapshot_light.png" width="400"/>
-  </a>
-  <a href="./doc/statics/snapshot_dark.png">
-    <img src="./doc/statics/snapshot_dark.png" width="400"/>
-  </a>
-</p>
+## Modifications Summary
 
-<div align="center" markdown="1">
-  <strong>Sponsored by Warp</strong>
-  <br>
-  <br>
-  <a href="https://go.warp.dev/chatbox">
-    <img alt="Warp sponsorship" width="400" src="https://raw.githubusercontent.com/warpdotdev/brand-assets/refs/heads/main/Github/Sponsor/Warp-Github-LG-02.png">
-  </a>
+### 1. Theme Engine (6 Color Schemes)
 
-### [Warp, built for coding with multiple AI agents.](https://go.warp.dev/chatbox)
-[Available for MacOS, Linux, & Windows](https://go.warp.dev/chatbox)<br>
-</div>
+Override Mantine CSS variables via `<html>` class switching to fully recolor the entire UI — not just the background canvas, but buttons, inputs, cards, modals, and all Mantine components.
 
----
+| Theme | Vibe |
+|-------|------|
+| **Default** | Dark purple gradient |
+| **Loki** | Green/gold, green-tinged dark |
+| **Doctor** | Clean white/blue, clinical |
+| **Aizen** | Warm brown/amber, elegant |
+| **Sakura** | Pink, soft romantic |
+| **OLED** | True black, max contrast |
 
-This is the repository for the Chatbox Community Edition, open-sourced under the GPLv3 license.
+Selection is persisted in `localStorage` under `albedo-theme`.
 
-[Chatbox is going open-source Again!](https://github.com/chatboxai/chatbox/issues/2266)
+### 2. Background Animations (5 Engines + None)
 
-We regularly sync code from the pro repo to this repo, and vice versa.
+A `<canvas>` overlay behind the app content provides animated backgrounds. Five distinct engines with real-time controls:
 
-## Download
+| Engine | Description |
+|--------|-------------|
+| **Particles** | Floating connected particles |
+| **Matrix Rain** | Green raining characters |
+| **Molecules** | Orbiting molecular structures |
+| **Retro Grid** | 3D perspective grid lines |
+| **Sakura Drift** | Falling cherry blossoms |
 
-### Desktop
+**Controls** (per engine): Speed slider, density/number slider, brightness/opacity slider.  
+Settings saved to `localStorage` under `albedo-canvas`.
 
-<table style="width: 100%">
-  <tr>
-    <td width="25%" align="center">
-      <b>Windows</b>
-    </td>
-    <td width="25%" align="center" colspan="2">
-      <b>MacOS</b>
-    </td>
-    <td width="25%" align="center">
-      <b>Linux</b>
-    </td>
-  </tr>
-  <tr style="text-align: center">
-    <td align="center" valign="middle">
-      <a href='https://chatboxai.app/?c=download-windows'>
-        <img src='./doc/statics/windows.png' style="height:24px; width: 24px" />
-        <br />
-        <b>Setup.exe</b>
-      </a>
-    </td>
-    <td align="center" valign="middle">
-      <a href='https://chatboxai.app/?c=download-mac-intel'>
-        <img src='./doc/statics/mac.png' style="height:24px; width: 24px" />
-        <br />
-        <b>Intel</b>
-      </a>
-    </td>
-    <td align="center" valign="middle">
-      <a href='https://chatboxai.app/?c=download-mac-aarch'>
-        <img src='./doc/statics/mac.png' style="height:24px; width: 24px" />
-        <br />
-        <b style="white-space: nowrap;">Apple Silicon</b>
-      </a>
-    </td>
-    <td align="center" valign="middle">
-      <a href='https://chatboxai.app/?c=download-linux'>
-        <img src='./doc/statics/linux.png' style="height:24px; width: 24px" />
-        <br />
-        <b>AppImage</b>
-      </a>
-    </td>
-  </tr>
-</table>
+### 3. Study Module
 
-### iOS/Android
+A left-sliding drawer (`#albedo-study-panel`) with:
 
-<a href='https://apps.apple.com/app/chatbox-ai/id6471368056' style='margin-right: 4px'>
-<img src='./doc/statics/app_store.webp' style="height:38px;" />
-</a>
-<a href='https://play.google.com/store/apps/details?id=xyz.chatboxapp.chatbox' style='margin-right: 4px'>
-<img src='./doc/statics/google_play.png' style="height:38px;" />
-</a>
-<a href='https://chatboxai.app/install?download=android_apk' style='margin-right: 4px; display: inline-flex; justify-content: center'>
-<img src='./doc/statics/android.png' style="height:28px; display: inline-block" />
-.APK
-</a>
+**Timer (4 modes):**
+- Pomodoro (25 min work / 5 min break)
+- Short Break (5 min)
+- Long Break (15 min)
+- Stopwatch (count up)
 
-For more information: [chatboxai.app](https://chatboxai.app/)
+**Features:** SVG circular progress ring, session counter, quick presets (5/15/25/30/60 min), custom minute input, audio completion alert (three synthesized beeps via AudioContext — no external files).
 
-## Quick Start
+**Music Player:**
+- HTML5 `<audio>` player with playlist UI
+- Multi-file selection, folder upload (`webkitdirectory`), drag-and-drop
+- Shuffle toggle (Fisher-Yates algorithm)
+- Repeat mode: All / One / None
 
-### For End Users
-1. Download the appropriate installer for your platform from the [releases page](https://github.com/chatboxai/chatbox/releases)
-2. Install and launch Chatbox
-3. Configure your AI provider (OpenAI, Claude, etc.) in settings
-4. Start chatting!
+### 4. Splash Screen
 
-### System Requirements
+Custom animated gradient splash replacing the default loader, with radial ambient glow animation and full CSS transitions. Adapts to both light and dark themes.
 
-| Platform | Minimum Version | Architecture |
-|----------|----------------|--------------|
-| Windows | Windows 10 | x64 |
-| macOS | macOS 11 (Big Sur) | Intel/Apple Silicon |
-| Linux | Ubuntu 20.04+ / AppImage supported distros | x64 |
+### 5. IPC Bridge (Named Pipe)
 
-<!-- <table>
-<tr>
-<td>
-<img src="./dec/../doc/demo_mobile_1.png" alt="App Screenshot" style="box-shadow: 2px 2px 10px rgba(0,0,0,0.1); border: 1px solid #ddd; border-radius: 8px; height: 300px" />
-</td>
-<td>
-<img src="./dec/../doc/demo_mobile_2.png" alt="App Screenshot" style="box-shadow: 2px 2px 10px rgba(0,0,0,0.1); border: 1px solid #ddd; border-radius: 8px; height: 300px" />
-</td>
-</tr>
-</table> -->
+A bidirectional JSON-packet bridge over Windows Named Pipes (`\\.\pipe\chatbox-bridge`) enables external processes to:
 
-## Features
+- Send queries and receive responses from the app
+- Inject messages into the chat UI
+- Submit search queries and retrieve results
 
-### 🤖 AI Model Support
--   **Support for Multiple LLM Providers**  
-    :gear: Seamlessly integrate with a variety of cutting-edge language models:
-    -   OpenAI (ChatGPT)
-    -   Azure OpenAI
-    -   Claude
-    -   Google Gemini Pro
-    -   Ollama (enable access to local models like llama2, Mistral, Mixtral, codellama, vicuna, yi, and solar)
-    -   ChatGLM-6B
+The bridge server (`albedo-bridge.js`) runs as a child process spawned by the main Electron process (`albedo-main-setup.js`).
 
--   **Image Generation with Dall-E-3**  
-    :art: Create the images of your imagination with Dall-E-3.
+### 6. Web Search Integration
 
--   **Enhanced Prompting**  
-    :speech_balloon: Advanced prompting features to refine and focus your queries for better responses.
+A Python script (`albedo-search.py`) provides web search via:
+- **Primary:** DuckDuckGo (HTML scraping, no API key needed)
+- **Fallback:** Google basic HTML search
 
-### 🖥️ User Experience
--   **Local Data Storage**  
-    :floppy_disk: Your data remains on your device, ensuring it never gets lost and maintains your privacy.
+Bound to the `albedo:web-search` IPC handler, exposed to the renderer for use within the app.
 
--   **No-Deployment Installation Packages**  
-    :package: Get started quickly with downloadable installation packages. No complex setup necessary!
+### 7. Knowledge Base Server
 
--   **Ergonomic UI & Dark Theme**  
-    :new_moon: A user-friendly interface with a night mode option for reduced eye strain during extended use.
+A secondary Named Pipe server (`\\.\pipe\albedo-kb`) provides file-based knowledge base search across markdown, JSON, and JSONL files. Designed for Akashic memory integration.
 
--   **Keyboard Shortcuts**  
-    :keyboard: Stay productive with shortcuts that speed up your workflow.
+### 8. External Send CLI
 
--   **Streaming Reply**  
-    :arrow_forward: Provide rapid responses to your interactions with immediate, progressive replies.
+A command-line tool (`albedo-send.js`) that sends messages into the app via the bridge:
+```bash
+node albedo-send.js "Hello from external script"
+```
 
-### 📄 Content & Formatting
--   **Markdown, Latex & Code Highlighting**  
-    :scroll: Generate messages with the full power of Markdown and Latex formatting, coupled with syntax highlighting for various programming languages, enhancing readability and presentation.
+## How to Use
 
--   **Prompt Library & Message Quoting**  
-    :books: Save and organize prompts for reuse, and quote messages for context in discussions.
-
-### 👥 Collaboration & Sharing
--   **Team Collaboration**  
-    :busts_in_silhouette: Collaborate with ease and share OpenAI API resources among your team. [Learn More](./team-sharing/README.md)
-
-### 🌐 Platform Availability
--   **Cross-Platform Desktop**  
-    :computer: Chatbox is ready for Windows, Mac, and Linux users.
-
--   **Web Version**  
-    :globe_with_meridians: Use the web application on any device with a browser, anywhere.
-
--   **Mobile Apps**  
-    :phone: Native iOS and Android applications for on-the-go access.
-
-### 🌍 Localization
--   **Multilingual Support**  
-    :earth_americas: Catering to a global audience by offering support in multiple languages:
-    -   English
-    -   简体中文 (Simplified Chinese)
-    -   繁體中文 (Traditional Chinese)
-    -   日本語 (Japanese)
-    -   한국어 (Korean)
-    -   Français (French)
-    -   Deutsch (German)
-    -   Русский (Russian)
-    -   Español (Spanish)
-
-### ✨ More Features
--   **And More...**  
-    :sparkles: Constantly enhancing the experience with new features!
-
-## FAQ
-
--   [Frequently Asked Questions](./doc/FAQ.md)
-
-## How to Contribute
-
-We welcome contributions from the community! Here's how you can help make Chatbox better:
-
-### 🐛 Reporting Issues
-- Use [GitHub Issues](https://github.com/chatboxai/chatbox/issues) to report bugs or request features
-- Before creating a new issue, please search existing issues to avoid duplicates
-- Provide detailed information including steps to reproduce, expected behavior, and screenshots if applicable
-
-### 🔧 Pull Requests
-1. Fork the repository and create your branch from `main`
-2. Make your changes and ensure the code follows our coding standards
-3. Test your changes thoroughly
-4. Update documentation if needed
-5. Submit a pull request with a clear description of the changes
-
-### 🌍 Translations
-Help make Chatbox accessible to more people by contributing translations:
-- Translation files are located in the `src/locales` directory
-- Follow the existing translation format
-- Submit a PR with your translation improvements
-
-### 📖 Documentation
-- Improve README, API documentation, or user guides
-- Fix typos or clarify unclear instructions
-- Add examples and tutorials
-
-### 🌟 Other Ways to Contribute
-- Star the repository to show your support
-- Share Chatbox with others
-- Answer questions in [GitHub Discussions](https://github.com/chatboxai/chatbox/discussions)
-- Provide feedback and suggestions
-
-**Thank you for contributing! 🙏**
-
-## Development
+1. **Download** the official [Chatbox Community Edition](https://github.com/chatboxai/chatbox/releases) installer for your platform
+2. **Replace** the `resources/app/` folder inside the Chatbox installation directory with the contents of this repository
+3. **Launch** Chatbox as usual — the modifications are all client-side
 
 ### Prerequisites
 
-Before you begin, ensure you have the following installed:
+- **Node.js** (for the bridge server — starts automatically; requires `node` on PATH)
+- **Python 3** (for web search — optional, falls back gracefully)
+- **Windows** (Named Pipes are platform-specific; canvas animations work on all OS)
 
-- **Node.js** (v20.x – v22.x) - [Download here](https://nodejs.org/)
-- **pnpm** (v10.x or later) - Install via `corepack enable && corepack prepare pnpm@latest --activate`
-- **Git** - [Download here](https://git-scm.com/)
+## Files We Added
 
-### Quick Setup
+| File | Purpose |
+|------|---------|
+| `dist/main/albedo-bridge.js` | Named pipe bridge server (IPC for external tools) |
+| `dist/main/albedo-kb-server.js` | Knowledge base search server |
+| `dist/main/albedo-main-setup.js` | Electron main process integration for bridge + web search |
+| `dist/main/albedo-search.py` | DuckDuckGo / Google web search script |
+| `dist/main/albedo-send.js` | CLI tool to send messages via bridge |
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/chatboxai/chatbox.git
-   cd chatbox
-   ```
+## Files We Modified
 
-2. **Install dependencies**
-   ```bash
-   pnpm install
-   ```
+| File | Change |
+|------|--------|
+| `dist/renderer/index.html` | Splash screen, theme engine JS/CSS, canvas animations, study drawer (timer + music player), search fetch interceptor |
+| `package.json` | Rebranded to Chatbox Modified, cleaned metadata |
 
-3. **Start development server**
-   ```bash
-   pnpm run dev
-   ```
-   The application will start in development mode with hot-reload enabled.
+## Technology
 
-### Build Commands
-
-| Command | Description |
-|---------|-------------|
-| `pnpm run dev` | Start development server with hot-reload |
-| `pnpm run package` | Build and package for current platform |
-| `pnpm run package:all` | Build and package for all platforms |
-| `pnpm run build` | Build for production without packaging |
-| `pnpm run lint` | Run Biome to check code quality |
-| `pnpm run test` | Run Vitest test suite |
-
-### Project Structure
-
-```
-chatbox/
-├── src/
-│   ├── main/               # Electron main process
-│   ├── renderer/           # React renderer (UI)
-│   ├── preload/            # Electron preload scripts
-│   └── shared/             # Shared utilities
-├── doc/                    # Documentation and assets
-├── resources/              # App resources and icons
-├── team-sharing/           # Team collaboration features
-└── package.json            # Project configuration
-```
-
-### Development Tips
-
-- Use `pnpm run lint` before committing to ensure code quality
-- Follow the existing code style and patterns
-- Test your changes on both light and dark themes
-- Ensure cross-platform compatibility when making UI changes
-
-### Troubleshooting
-
-**Issue**: `pnpm install` fails
-- **Solution**: Ensure you're using pnpm (not npm or yarn) and Node.js version is within the required range. Run `corepack enable` if pnpm is not found.
-
-**Issue**: Build fails on Windows
-- **Solution**: Run `pnpm config set script-shell "C:\\Program Files\\git\\bin\\bash.exe"` if using Git Bash
-
-**Issue**: Changes not reflecting in development
-- **Solution**: Stop the dev server, delete `node_modules/.vite`, and restart
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=chatboxai/chatbox&type=Date)](https://star-history.com/#chatboxai/chatbox&Date)
-
-## Contact
-
-[Email](mailto:hi@chatboxai.com)
+- **Built on:** Chatbox Community Edition (GPL v3)
+- **Canvas animations:** Pure Canvas 2D API, no libraries
+- **Audio:** Web Audio API (no external audio assets)
+- **Bridge:** Windows Named Pipes (`net` module)
+- **Search:** Python 3 + BeautifulSoup + Requests
+- **Theming:** CSS custom properties (`--mantine-color-*`) overrides
 
 ## License
 
-[LICENSE](./LICENSE)
+Same as the original — [GPL v3](LICENSE). This is a modified fork of the [Chatbox Community Edition](https://github.com/chatboxai/chatbox).
