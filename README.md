@@ -8,9 +8,9 @@ This repository contains the **prebuilt, modified version** of Chatbox — an El
 
 ## Screenshots
 
-| Theme Panel | Chat View | Study Drawer |
-|-------------|-----------|--------------|
-| ![Theme Panel](screenshots/theme-panel.png) | ![Chat View](screenshots/chat-view.png) | ![Study Drawer](screenshots/study-drawer.png) |
+**[Image 1] Albedo Chat 6_20_2026 1_56_21 PM**
+
+![Screenshot](screenshots/chat-view.png)
 
 ## Modifications Summary
 
