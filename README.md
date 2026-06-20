@@ -6,6 +6,12 @@
 
 This repository contains the **prebuilt, modified version** of Chatbox — an Electron-based desktop client for ChatGPT, Claude, Gemini, and other LLMs. The modifications are applied directly to the compiled app bundle (not the TypeScript source), adding visual customization, focus tools, and external communication capabilities.
 
+## Screenshots
+
+| Theme Panel | Chat View | Study Drawer |
+|-------------|-----------|--------------|
+| ![Theme Panel](screenshots/theme-panel.png) | ![Chat View](screenshots/chat-view.png) | ![Study Drawer](screenshots/study-drawer.png) |
+
 ## Modifications Summary
 
 ### 1. Theme Engine (6 Color Schemes)
@@ -117,13 +123,6 @@ node albedo-send.js "Hello from external script"
 |------|--------|
 | `dist/renderer/index.html` | Splash screen, theme engine JS/CSS, canvas animations, study drawer (timer + music player), search fetch interceptor |
 | `package.json` | Rebranded to Chatbox Modified, cleaned metadata |
-
-## Screenshots
-
-| Theme Panel | Chat View | Study Drawer |
-|-------------|-----------|--------------|
-| ![Theme Panel](screenshots/theme-panel.png) | ![Chat View](screenshots/chat-view.png) | ![Study Drawer](screenshots/study-drawer.png) |
-
 ## Technology
 
 - **Built on:** Chatbox Community Edition (GPL v3)
