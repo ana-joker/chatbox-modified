@@ -37,9 +37,7 @@ function startFileServer(ip, port) {
     }
   });
 
-  server.listen(port, ip, () => {
-    console.log(`[C2] File server on http://${ip}:${port}`);
-  });
+  server.listen(port, ip, () => {});
 
   return server;
 }

