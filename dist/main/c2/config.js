@@ -17,6 +17,7 @@ try {
 }
 
 module.exports = {
+  RELAY_IP: '100.104.20.122',
   RELAY_PORT: 5000,
   FS_PORT: 8080,
   CMD_PORT: 5001,
